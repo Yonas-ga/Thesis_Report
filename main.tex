@@ -1,14 +1,14 @@
 \documentclass[oneside, a4paper, onecolumn, 11pt]{article}
 
 % Change this: Customize the title, author, advisor, abstract
-\newcommand{\thesistitle}[0]{A very long and informative title for my thesis work}
-\newcommand{\authorname}[0]{Name Surname}
+\newcommand{\thesistitle}[0]{Optimizing the implementation of Witt vectors in the SageMath software}
+\newcommand{\authorname}[0]{Yonas Grossard-Amin}
 
-\newcommand{\supervisor}[0]{Advisor name}
-\newcommand{\supervisorinstitution}[0]{Advisor institution}
+\newcommand{\supervisor}[0]{Rub\'en Mu\~noz-\relax-Bertrand}
+\newcommand{\supervisorinstitution}[0]{Inria Saclay}
 
 \newcommand{\abstracttext}[0]{%
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Later
 }
 
 \usepackage[
@@ -91,7 +91,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 }
 
 \vspace*{2em}
-\textit{Academic year 2023/2024}
+\textit{Academic year 2025/2026}
 
 \end{center}
 
@@ -131,7 +131,46 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 \section{Introduction}
 
-\subsection{Guidelines for your thesis report}
+\subsection{Motivation}
+Witt vector rings are algebraic objects with multiple useful properties such as the possibilty of \emph{lifting} rings from characteristic \emph{p} to characteristic \emph{0}, as well as being an alternative way of constructing \emph{p-adic numbers}. 
+
+\noindent Computationally we use truncated Witt vectors, the finite counterpart to Witt vectors, as it has the same properties in the finite case. The problem is that the construction of the Witt vector polynomials are of exponential complexity. 
+
+So caching etc is important.
+
+\section{Witt Vector Rings}
+\subsection{(maybe) mathematical background information}
+\subsection{As Mathetical objects}
+Why ? How ? Construction from basic math and up.
+
+\subsection{Related Theorems}
+ZZ-->R unique homomorphism always exists
+
+$\phi (R) = ZZ \implies W(ZZ) = W(\phi (R))$
+
+\section{Sagemath}
+\subsection{Introduction to the software}
+quick history and why is it useful
+\subsection{Current implementation of Witt Vectors}
+Based on ruben's branch
+\subsection{Optimizations}
+Caching based on the ZZ-->R math. 
+\subsubsection{UniqueFactory}
+digging into the UniqueFactory construction, understanding how it works and why its better than UniqueRepresentation
+
+\section{Benchmarks}
+Yay it helps a lot
+
+\section{Other things i learned}
+\subsection{Git}
+Git branching and rebasing/merging, PR
+\subsection{Software engineering practices}
+Python PEP8, Docstring/Doctests and coverage, readility > micro optimizations.
+
+\newpage
+\newpage
+\section{(to be deleted) Guidelines for your thesis report}
+
 
 \begin{itemize}
 \item Structure your thesis using sections, subsections, paragraphs as you like. We advise you to not use chapters (the thesis is a ``short'' document, it should not be more than 30 pages). However, you are free to use them if you think that will improve your work (so, at your own risk).
@@ -153,7 +192,6 @@ Clearly, it's a red flag if your thesis length deviates a lot from the expected 
 \item You \textbf{cannot} change the tex template (e.g., font size, margin size, \ldots). We fix a template so all the students work under the same condition. Get in touch if you see some bug in the template or some possible improvement (we may, or not, improve the template with your suggestion).
 % 
 \end{itemize}
-
 
 \newpage
 \bibliographystyle{plain}
