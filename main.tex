@@ -140,9 +140,88 @@ So caching etc is important.
 
 \section{Witt Vector Rings}
 \subsection{(maybe) mathematical background information}
-Results from commutative algebra (probably no proofs, either reference paper or Appendix)
+\fbox{\parbox{\textwidth}{
+These results are shown before the construction of Witt vectors, as they are important for said construction but can confuse the reader if intertwined with the explanation. These results can be considered as prerequisites for the understanding of the construction of Witt vectors.
+}}
+\newline
+
+\noindent In the following, let $p$ be a fixed prime number. 
+
+\noindent It is common knowledge that $\mathbb{F}_p = \mathbb{Z}/p\mathbb{Z} = \mathbb{Z}/(p)$ endowed with the usual addition and multiplication modulo $p$ is a field with a finite amount of elements. This can easily be checked, but can also be proven using the fact that the ideal $(p)$ is maximal, and that the quotient of a ring with a maximal ideal is a field.  \textbf{Maybe proof in appendix ? not sure its necessary}
+
+\noindent Now recall the construction of the frobenius map, a fundamental map that appears in every ring of characteristic $p$: $$F: A \to A$$ defined by $$F(x) = x^p$$ for any ring $A$ of characteristic $p$.
+
+\noindent This ring homomorphism is well defined. Indeed, for all $x,y\in A$, one has:
+
+$$F(xy) = (xy)^p = x^p y^p = F(x)F(y)$$
+\noindent And also $$F(x+y) = (x+y)^p$$
+\noindent Where we can utilize the fact that in modulo $p$, $\forall a,b\in \mathbb{F}_p$ we have $(a+b)^p=a^p+b^p$. In fact, $$(a+b)^p = \sum_{i=0}^{p}\binom{p}{i}a^ib^{p-i} = a^p+b^p+\sum_{i=1}^{p-1}\binom{p}{i}a^ib^{p-i}$$
+\noindent And the binomial factor $\binom{p}{i}$ is a multiple of $p$ for all $i\in\{1,\ldots,p-1\}$, so it is nul in modulo $p$, so
+$$(x+y)^p = x^p + y^p$$
+Therefore $$F(x+y)=F(x)+F(y)$$
+And the frobenius map is a ring homomorphism. 
+
+\noindent In fact, in the special case where $A=\mathbb{F}_p$, we get that the frobenius map is the identity. 
+
+\noindent Let $a\in \mathbb{F}_p$. If $a=0$ then the identity holds. Else, $a\in\mathbb{F}_p^{\times}= \mathbb{F}_p\backslash\{0\}$
+and then, by Fermats little theorem, $$a^p\equiv a \mod p$$
+Now because we work in characteristic $p$, this congruence is in fact an equality, and the frobenius map is the identity.
+
+\noindent From this, if $a\in\mathbb{F}_p^{\times}$ we get that $a^{p-1}\equiv1\mod p$ by multplying both sides by $a^{-1}$. This means that each non-zero element of $\mathbb{F}_p$ is a $(p-1)$th root of unity.
+
+Every non-zero element of Fp is a root of 1.
+
+Teichmuller representatives
+
+
 \subsection{As Mathetical objects}
 Why ? How ? Construction from basic math and up.
+
+\noindent There are multiple ways of introducing Witt Vectors. We will use the constructive introduction since it requires comparatively little background and makes the origin of the construction easier to understand.
+
+We will first show how the idea of Witt vectors come to light naturally, then how one comes to the idea of ghost components, finally we will show how the operations result in Sum and Product polynomials.
+\newline
+\newline
+\noindent In the following, let $p$ be a fixed prime number. 
+
+\noindent  Every $p$-adic integer $s \in \mathbb{Z}_p$ admits a unique expansion of the form $$s=\sum_{i=0}^{\infty}a_ip^i \text{  with  } a_i\in\{0,..,p-1\}$$
+
+\noindent Since the set $\{0,1,\ldots,p-1\}$ is isomorphic to $\mathbb{F}_p$, each $p$-adic number can be uniquely represented by a sequence $(a_0,a_1,a_2,\ldots)$ with $a_i \in \mathbb{F}_p$.
+
+\noindent This suggests that there may exist a way of reconstructing $\mathbb{Z}_p$ from $\mathbb{F}_p^{\mathbb{N}}$. We now investigate whether such a reconstruction can be made into a ring-theoretic one.
+
+\noindent Since $\mathbb{Z}_p$ is a ring, we need to endow $\mathbb{F}_p^{\mathbb{N}}$ with a ring structure that support the arithmetic of $p$-adic integers. However this cannot be done using componentwise operations because of the carry arithmetic involved in addition and multiplication of $p$-adic integers. For example: \newline $$(1,0,0,\ldots)+(p-1,0,0,\ldots)=(0,0,0,\ldots)$$ under componentwise addition in $\mathbb{F}_p^{\mathbb{N}}$ whereas $$1+p-1=1*p$$ in $\mathbb{Z}_p$ corresponds to $$(0,1,0,\ldots)\ne (0,0,0,\ldots)$$
+
+\noindent Thus the correct ring structure on $\mathbb{F}_p^{\mathbb{N}}$ cannot be the naive componentwise one.
+
+
+\noindent A first idea would be to define a map
+$$\phi:\mathbb{F}_p^{\mathbb{N}}\to\mathbb{Z}_p $$
+such that: $$\phi((a_0,a_1,a_2,\ldots))=a_0+a_1p+a_2p^2+\ldots$$
+but such a construction is not yet well-defined, since the coefficients $a_i$ lie in $\mathbb{F}_p$, whereas the series is an element of $\mathbb{Z}_p$. 
+So first, we must first choose a lift of the coefficients from $\mathbb{F}_p$ to $\mathbb{Z}_p$.
+
+\noindent A natural choice is given by the Teichmüller representatives.
+\newline
+\newline
+\newline
+
+\noindent A natural choice is given by the Teichmüller representatives. For each \(a \in \mathbb{F}_p\), there exists a unique lift \(\chi(a) \in \mathbb{Z}_p\) such that
+\[
+\chi(a) \equiv a \pmod p
+\qquad\text{and}\qquad
+\chi(a)^p = \chi(a).
+\]
+These representatives are canonical and are fixed by Frobenius. We may therefore replace the previous expression by
+\[
+\phi((a_0,a_1,a_2,\ldots)) = \chi(a_0) + \chi(a_1)p + \chi(a_2)p^2 + \cdots.
+\]
+This gives a meaningful way to associate a \(p\)-adic integer to a sequence of elements of \(\mathbb{F}_p\). 
+
+
+
+
+
 
 \subsection{Related Theorems}
 ZZ-->R unique homomorphism always exists
