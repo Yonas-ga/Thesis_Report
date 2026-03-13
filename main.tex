@@ -39,6 +39,11 @@ Later
 \usepackage{titling}
 \usepackage[nottoc,numbib]{tocbibind}
 
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+
 %% \predate{}
 %% \postdate{}
 %% \date{}
@@ -139,7 +144,7 @@ Witt vector rings are algebraic objects with multiple useful properties such as 
 So caching etc is important.
 
 \section{Witt Vector Rings}
-\subsection{(maybe) mathematical background information}
+\subsection{Mathematical background}\label{subsec:background}
 \fbox{\parbox{\textwidth}{
 These results are shown before the construction of Witt vectors, as they are important for said construction but can confuse the reader if intertwined with the explanation. These results can be considered as prerequisites for the understanding of the construction of Witt vectors.
 }}
@@ -169,10 +174,13 @@ Now because we work in characteristic $p$, this congruence is in fact an equalit
 
 \noindent From this, if $a\in\mathbb{F}_p^{\times}$ we get that $a^{p-1}\equiv1\pmod p$ by multplying both sides by $a^{-1}$. This means that each non-zero element of $\mathbb{F}_p$ is a $(p-1)$th root of unity.
 
-Every non-zero element of Fp is a root of 1.
-
-Teichmuller representatives
-
+\begin{theorem}[Hensel's lemma]\label{Hensel}
+Let $f(X)\in\mathbb{Z}_p[X]$, and let $a_0\in\mathbb{Z}_p$ be such that
+$$f(a_0)\equiv 0 \pmod p \qquad\text{and}\qquad f'(a_0)\not\equiv 0 \pmod p$$
+Then there exists a unique $\alpha\in\mathbb{Z}_p$ such that
+$$ \alpha\equiv a_0 \pmod p \qquad\text{and}\qquad f(\alpha)=0$$
+\end{theorem}
+The proof of this theorem is long, and out of scope. It can be found in the first 3 pages of (reference) if the reader is interested.
 
 \subsection{As Mathetical objects}
 Why ? How ? Construction from basic math and up.
@@ -211,7 +219,38 @@ Thus we are now looking for elements $x\in\mathbb{Z}_p$ satisfying $x^p=x$
 \noindent Solving this equation gets us: $$x^p=x \Longleftrightarrow x(x^{p-1}-1)=0$$
 That is, $x$ is either $0$ or a $(p-1)$th root of unity.
 
+\noindent In fact such a lift exists, and it is unique. 
 
+\begin{proposition}
+For every $a\in\mathbb{F}_p$, there exists a unique element $\chi(a)\in\mathbb{Z}_p$ such that
+$$\chi(a)\equiv a \pmod p \qquad \text{and} \qquad \chi(a)^p=\chi(a) $$
+This map $\chi:\mathbb{F}_p\to\mathbb{Z}_p$ is called the Teichmüller lift.
+\end{proposition}
+
+\begin{proof}
+First consider the case $a=0$. Then $x=0$ clearly satisfies
+$$ x\equiv 0 \pmod p\qquad\text{and}\qquad x^p=x$$
+and it is the unique such element.
+
+Now let $a\in\mathbb{F}_p^\times$. We look for $x\in\mathbb{Z}_p$ such that
+$$x\equiv a \pmod p \qquad\text{and}\qquad x^p=x$$
+Since $x$ is nonzero, the equation $x^p=x$ is equivalent to $$x^{p-1}=1$$
+Now, consider the polynomial $$f(X)=X^{p-1}-1\in\mathbb{Z}_p[X]$$
+Because $a\in\mathbb{F}_p^\times$, from Subsecton \ref{subsec:background} we get that 
+$$f(a)=a^{p-1}-1=0\equiv 0 \pmod p $$
+Moreover, $$f'(X)=(p-1)X^{p-2}$$
+so $$ f'(a)=(p-1)a^{p-2}\not\equiv 0 \pmod p$$
+since $a\neq 0$ and $p-1\not\equiv 0\pmod p$.
+
+Therefore, by Hensel’s lemma \ref{Hensel}, there exists a unique $\widetilde a\in\mathbb{Z}_p$ such that
+$$\widetilde a\equiv a \pmod p \qquad\text{and}\qquad f(\widetilde a)=0$$
+And so, $$f(\widetilde a)=\widetilde a^{p-1}-\widetilde a= 0\implies \widetilde a^{p-1}=1$$
+Since $\widetilde a\neq 0$, multiplying both sides by $\widetilde a$ yields $$\widetilde a^p=\widetilde a$$
+We now define $\chi(a):=\widetilde a$.
+
+This proves that for every $a\in\mathbb{F}_p$ there exists a unique element $\chi(a)\in\mathbb{Z}_p$ satisfying
+$$\chi(a)\equiv a \pmod p \qquad\text{and}\qquad \chi(a)^p=\chi(a)$$
+\end{proof}
 
 
 
