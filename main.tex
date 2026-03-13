@@ -165,7 +165,7 @@ And the frobenius map is a ring homomorphism.
 
 \noindent Let $a\in \mathbb{F}_p$. If $a=0$ then the identity holds. Else, $a\in\mathbb{F}_p^{\times}= \mathbb{F}_p\backslash\{0\}$
 and then, by Fermats little theorem, $$a^p\equiv a \mod p$$
-Now because we work in characteristic $p$, this congruence is in fact an equality, and the frobenius map is the identity.
+Now because we work in characteristic $p$, this congruence is in fact an equality, and the frobenius map is indeed the identity.
 
 \noindent From this, if $a\in\mathbb{F}_p^{\times}$ we get that $a^{p-1}\equiv1\mod p$ by multplying both sides by $a^{-1}$. This means that each non-zero element of $\mathbb{F}_p$ is a $(p-1)$th root of unity.
 
@@ -199,12 +199,16 @@ We will first show how the idea of Witt vectors come to light naturally, then ho
 $$\phi:\mathbb{F}_p^{\mathbb{N}}\to\mathbb{Z}_p $$
 such that: $$\phi((a_0,a_1,a_2,\ldots))=a_0+a_1p+a_2p^2+\ldots$$
 but such a construction is not yet well-defined, since the coefficients $a_i$ lie in $\mathbb{F}_p$, whereas the series is an element of $\mathbb{Z}_p$. 
-So first, we must first choose a lift of the coefficients from $\mathbb{F}_p$ to $\mathbb{Z}_p$.
+So first, we must first choose a lift (ie. a morphism) of the coefficients from $\mathbb{F}_p$ to $\mathbb{Z}_p$. Our goal is to find such a lift with the best properties, to facilitate the construction. To do so, we try to find a lift that is fixed by the frobenius morphism, which would allow elements $x\in\mathbb{Z}_p$ to satisfy $x^p=x$ just like they do in $\mathbb{F}_p$.
+
+\noindent Solving this equation gets us: $$x^p=x \implies x^p-x=0 \implies x(x^{p-1}-1)=0$$
+That is, $x$ is either $0$ or a $(p-1)$th root of unity.
 
 \noindent A natural choice is given by the Teichmüller representatives.
 \newline
 \newline
 \newline
+
 
 
 
