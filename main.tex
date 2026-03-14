@@ -137,7 +137,7 @@ Later
 \section{Introduction}
 
 \subsection{Motivation}
-Witt vector rings are algebraic objects with multiple useful properties such as the possibilty of \emph{lifting} rings from characteristic \emph{p} to characteristic \emph{0}, as well as being an alternative way of constructing \emph{p-adic numbers}. 
+Witt vector rings are algebraic objects with multiple useful properties such as the possibilty of \emph{lifting} rings from characteristic $p$ to characteristic $0$, as well as being an alternative way of constructing \emph{p-adic numbers}. 
 
 \noindent Computationally we use truncated Witt vectors, the finite counterpart to Witt vectors, as it has the same properties in the finite case. The problem is that the construction of the Witt vector polynomials are of exponential complexity. 
 
@@ -154,31 +154,31 @@ These results are shown before the construction of Witt vectors, as they are imp
 
 \noindent It is common knowledge that $\mathbb{F}_p = \mathbb{Z}/p\mathbb{Z} = \mathbb{Z}/(p)$ endowed with the usual addition and multiplication modulo $p$ is a field with a finite amount of elements. This can easily be checked, but can also be proven using the fact that the ideal $(p)$ is maximal, and that the quotient of a ring with a maximal ideal is a field.  \textbf{Maybe proof in appendix ? not sure its necessary}
 
-\noindent Now recall the construction of the Frobenius map, a fundamental map that appears in every ring of characteristic $p$: $$F: A \to A$$ defined by $$F(x) = x^p$$ for any ring $A$ of characteristic $p$.
+\noindent Now recall the construction of the Frobenius map, a fundamental map that appears in every ring of characteristic $p$: \[F: A \to A\] defined by \[F(x) = x^p\] for any ring $A$ of characteristic $p$.
 
 \noindent This ring homomorphism is well defined. Indeed, for all $x,y\in A$, one has:
 
-$$F(xy) = (xy)^p = x^p y^p = F(x)F(y)$$.
-\noindent And also $$F(x+y) = (x+y)^p$$.
-\noindent Where wecan utilize the fact that in modulo $p$, $\forall a,b\in \mathbb{F}_p$ we have $(a+b)^p=a^p+b^p$. In fact, $$(a+b)^p = \sum_{i=0}^{p}\binom{p}{i}a^ib^{p-i} = a^p+b^p+\sum_{i=1}^{p-1}\binom{p}{i}a^ib^{p-i}$$.
+\[F(xy) = (xy)^p = x^p y^p = F(x)F(y)\].
+\noindent And also \[F(x+y) = (x+y)^p\].
+\noindent Where wecan utilize the fact that in modulo $p$, $\forall a,b\in \mathbb{F}_p$ we have $(a+b)^p=a^p+b^p$. In fact, \[(a+b)^p = \sum_{i=0}^{p}\binom{p}{i}a^ib^{p-i} = a^p+b^p+\sum_{i=1}^{p-1}\binom{p}{i}a^ib^{p-i}\].
 \noindent And the binomial factor $\binom{p}{i}$ is a multiple of $p$ for all $i\in\{1,\ldots,p-1\}$, so it is zero in modulo $p$, so
-$$(x+y)^p = x^p + y^p$$.
-Therefore $$F(x+y)=F(x)+F(y)$$.
+\[(x+y)^p = x^p + y^p\].
+Therefore \[F(x+y)=F(x)+F(y)\].
 And the Frobenius map is a ring homomorphism. 
 
 \noindent In fact, in the special case where $A=\mathbb{F}_p$, we get that the Frobenius map is the identity. 
 
 \noindent Let $a\in \mathbb{F}_p$. If $a=0$ then the identity holds. Else, $a\in\mathbb{F}_p^{\times}= \mathbb{F}_p\backslash\{0\}$
-and then, by Fermat's little theorem, $$a^p\equiv a \pmod p$$.
+and then, by Fermat's little theorem, \[a^p\equiv a \pmod p\].
 Since $\mathbb{F}_p = \mathbb{Z}/p\mathbb{Z}$, congruence modulo $p$ becomes equality, and the Frobenius map is indeed the identity.
 
 \noindent From this, if $a\in\mathbb{F}_p^{\times}$ we get that $a^{p-1}\equiv1\pmod p$ by multplying both sides by $a^{-1}$. This means that each non-zero element of $\mathbb{F}_p$ is a $(p-1)$th root of unity.
 
 \begin{theorem}[Hensel's lemma]\label{Hensel}
 Let $f(X)\in\mathbb{Z}_p[X]$, and let $a_0\in\mathbb{Z}_p$ be such that
-$$f(a_0)\equiv 0 \pmod p \qquad\text{and}\qquad f'(a_0)\not\equiv 0 \pmod p$$.
+\[f(a_0)\equiv 0 \pmod p \qquad\text{and}\qquad f'(a_0)\not\equiv 0 \pmod p\].
 Then there exists a unique $\alpha\in\mathbb{Z}_p$ such that
-$$ \alpha\equiv a_0 \pmod p \qquad\text{and}\qquad f(\alpha)=0$$.
+\[ \alpha\equiv a_0 \pmod p \qquad\text{and}\qquad f(\alpha)=0\].
 \end{theorem}
 The proof of this theorem is long, and out of scope. It can be found in the first 3 pages of (reference) if the reader is interested.
 
@@ -192,112 +192,112 @@ We will first show how the idea of Witt vectors come to light naturally, then ho
 \newline
 \noindent In the following, let $p$ be a fixed prime number. 
 
-\noindent  Every $p$-adic integer $s \in \mathbb{Z}_p$ admits a unique expansion of the form $$s=\sum_{i=0}^{\infty}a_ip^i \text{  with  } a_i\in\{0,..,p-1\}$$.
+\noindent  Every $p$-adic integer $s \in \mathbb{Z}_p$ admits a unique expansion of the form \[s=\sum_{i=0}^{\infty}a_ip^i \text{  with  } a_i\in\{0,..,p-1\}\].
 
 \noindent Since the set $\{0,1,\ldots,p-1\}$ is isomorphic to $\mathbb{F}_p$, each $p$-adic number can be uniquely represented by a sequence $(a_0,a_1,a_2,\ldots)$ with $a_i \in \mathbb{F}_p$.
 
 \noindent This suggests that there may exist a way of reconstructing $\mathbb{Z}_p$ from $\mathbb{F}_p^{\mathbb{N}}$. We now investigate whether such a reconstruction can be made into a ring-theoretic one.
 
 \noindent Since $\mathbb{Z}_p$ is a ring, we need to endow $\mathbb{F}_p^{\mathbb{N}}$ with a ring structure that support the arithmetic of $p$-adic integers. However this cannot be done using componentwise operations because of the carry arithmetic involved in addition and multiplication of $p$-adic integers. For example:
-$$(1,0,0,\ldots)+(p-1,0,0,\ldots)=(0,0,0,\ldots)$$ under componentwise addition in $\mathbb{F}_p^{\mathbb{N}}$ whereas $$1+(p-1)=p$$ in $\mathbb{Z}_p$ corresponds to $$(0,1,0,\ldots)\ne (0,0,0,\ldots)$$.
+\[(1,0,0,\ldots)+(p-1,0,0,\ldots)=(0,0,0,\ldots)\] under componentwise addition in $\mathbb{F}_p^{\mathbb{N}}$ whereas \[1+(p-1)=p\] in $\mathbb{Z}_p$ corresponds to \[(0,1,0,\ldots)\ne (0,0,0,\ldots)\].
 
 \noindent Thus the correct ring structure on $\mathbb{F}_p^{\mathbb{N}}$ cannot be the naive componentwise one.
 
 
 \noindent A first idea would be to define a map
-$$\phi:\mathbb{F}_p^{\mathbb{N}}\to\mathbb{Z}_p $$
-such that: $$\phi((a_0,a_1,a_2,\ldots))=a_0+a_1p+a_2p^2+\ldots$$
+\[\phi:\mathbb{F}_p^{\mathbb{N}}\to\mathbb{Z}_p \]
+such that: \[\phi((a_0,a_1,a_2,\ldots))=a_0+a_1p+a_2p^2+\ldots\]
 but such a construction is not yet well-defined, since the coefficients $a_i$ lie in $\mathbb{F}_p$, whereas the series is an element of $\mathbb{Z}_p$. 
 
-\noindent We must therefore choose, for each coefficient in $\mathbb{F}_p$, a canonical lift to $\mathbb{Z}_p$. In other words, we seek a map $$\chi:\mathbb{F}_p\to\mathbb{Z}_p$$
-which is a section (ie. some kind of inverse on $\mathbb{F}_p$) of the reduction map $$\pi:\mathbb{Z}_p\to\mathbb{F}_p,\qquad \pi(x)=x \bmod p$$
-so that $$\pi(\chi(a))=a \qquad\text{for all } a\in\mathbb{F}_p$$.
-Equivalently, we require $$ \chi(a)\equiv a \pmod p$$.
+\noindent We must therefore choose, for each coefficient in $\mathbb{F}_p$, a canonical lift to $\mathbb{Z}_p$. In other words, we seek a map \[\chi:\mathbb{F}_p\to\mathbb{Z}_p\]
+which is a section (ie. some kind of inverse on $\mathbb{F}_p$) of the reduction map \[\pi:\mathbb{Z}_p\to\mathbb{F}_p,\qquad \pi(x)=x \bmod p\]
+so that \[\pi(\chi(a))=a \qquad\text{for all } a\in\mathbb{F}_p\].
+Equivalently, we require \[ \chi(a)\equiv a \pmod p\].
 
-\noindent In order for this lift to interact well with the arithmetic in characteristic $p$, it is natural to impose the additional condition that $\chi(a)$ be fixed by Frobenius: $$\chi(a)^p=\chi(a)$$.
+\noindent In order for this lift to interact well with the arithmetic in characteristic $p$, it is natural to impose the additional condition that $\chi(a)$ be fixed by Frobenius: \[\chi(a)^p=\chi(a)\].
 Thus we are now looking for elements $x\in\mathbb{Z}_p$ satisfying $x^p=x$.
 
-\noindent Solving this equation gets us: $$x^p=x \Longleftrightarrow x(x^{p-1}-1)=0$$.
+\noindent Solving this equation gets us: \[x^p=x \Longleftrightarrow x(x^{p-1}-1)=0\].
 That is, $x$ is either $0$ or a $(p-1)$th root of unity.
 
 \noindent In fact such a lift exists, and it is unique. 
 
 \begin{proposition}
 For every $a\in\mathbb{F}_p$, there exists a unique element $\chi(a)\in\mathbb{Z}_p$ such that
-$$\chi(a)\equiv a \pmod p \qquad \text{and} \qquad \chi(a)^p=\chi(a) $$.
+\[\chi(a)\equiv a \pmod p \qquad \text{and} \qquad \chi(a)^p=\chi(a) \].
 This map $\chi:\mathbb{F}_p\to\mathbb{Z}_p$ is called the Teichmüller lift.
 \end{proposition}
 
 \begin{proof}
 First consider the case $a=0$. Then $x=0$ clearly satisfies
-$$ x\equiv 0 \pmod p\qquad\text{and}\qquad x^p=x$$
+\[ x\equiv 0 \pmod p\qquad\text{and}\qquad x^p=x\]
 and it is the unique such element.
 
 Now let $a\in\mathbb{F}_p^\times$. We look for $x\in\mathbb{Z}_p$ such that
-$$x\equiv a \pmod p \qquad\text{and}\qquad x^p=x$$.
-Since $x$ is nonzero, the equation $x^p=x$ is equivalent to $$x^{p-1}=1$$.
-Now, consider the polynomial $$f(X)=X^{p-1}-1\in\mathbb{Z}_p[X]$$.
+\[x\equiv a \pmod p \qquad\text{and}\qquad x^p=x\].
+Since $x$ is nonzero, the equation $x^p=x$ is equivalent to \[x^{p-1}=1\].
+Now, consider the polynomial \[f(X)=X^{p-1}-1\in\mathbb{Z}_p[X]\].
 Because $a\in\mathbb{F}_p^\times$, from Subsecton \ref{subsec:background} we get that 
-$$f(a)=a^{p-1}-1=0\equiv 0 \pmod p $$.
-Moreover, $$f'(X)=(p-1)X^{p-2}$$
-so $$ f'(a)=(p-1)a^{p-2}\not\equiv 0 \pmod p$$
+\[f(a)=a^{p-1}-1=0\equiv 0 \pmod p \].
+Moreover, \[f'(X)=(p-1)X^{p-2}\]
+so \[ f'(a)=(p-1)a^{p-2}\not\equiv 0 \pmod p\]
 since $a\neq 0$ and $p-1\not\equiv 0\pmod p$.
 
 Therefore, by Hensel’s lemma \ref{Hensel}, there exists a unique $\widetilde a\in\mathbb{Z}_p$ such that
-$$\widetilde a\equiv a \pmod p \qquad\text{and}\qquad f(\widetilde a)=0$$
-And so, $$f(\widetilde a)=\widetilde a^{p-1}-1= 0\implies \widetilde a^{p-1}=1$$.
-Since $\widetilde a\neq 0$, multiplying both sides by $\widetilde a$ yields $$\widetilde a^p=\widetilde a$$.
+\[\widetilde a\equiv a \pmod p \qquad\text{and}\qquad f(\widetilde a)=0\]
+And so, \[f(\widetilde a)=\widetilde a^{p-1}-1= 0\implies \widetilde a^{p-1}=1\].
+Since $\widetilde a\neq 0$, multiplying both sides by $\widetilde a$ yields \[\widetilde a^p=\widetilde a\].
 We now define $\chi(a):=\widetilde a$.
 
 This proves that for every $a\in\mathbb{F}_p$ there exists a unique element $\chi(a)\in\mathbb{Z}_p$ satisfying
-$$\chi(a)\equiv a \pmod p \qquad\text{and}\qquad \chi(a)^p=\chi(a)$$.
+\[\chi(a)\equiv a \pmod p \qquad\text{and}\qquad \chi(a)^p=\chi(a)\].
 \end{proof}
 
 \noindent We may now define
-$$\phi((a_0,a_1,a_2,\ldots)) = \chi(a_0)+\chi(a_1)p+\chi(a_2)p^2+\cdots$$
+\[\phi((a_0,a_1,a_2,\ldots)) = \chi(a_0)+\chi(a_1)p+\chi(a_2)p^2+\cdots\]
 which is a well-defined element of $\mathbb{Z}_p$. Thus every sequence in $\mathbb{F}_p^{\mathbb{N}}$ gives rise to a $p$-adic expansion with Teichmüller representatives as coefficients.
 
 \noindent The map $\phi$ provides a bijection between $\mathbb{F}_p^{\mathbb{N}}$ and $\mathbb{Z}_p$. One might then attempt to transport the ring structure of $\mathbb{Z}_p$ to $\mathbb{F}_p^{\mathbb{N}}$ with $\phi$. 
-In other words, for two sequences $$a=(a_0,a_1,a_2,\ldots), \qquad b=(b_0,b_1,b_2,\ldots), \qquad a,b\in\mathbb{F}_p^{\mathbb{N}}$$
-we may define $$a \oplus b := \phi^{-1}(\phi(a)+\phi(b)), \qquad a \otimes b := \phi^{-1}(\phi(a)\phi(b))$$.
+In other words, for two sequences \[a=(a_0,a_1,a_2,\ldots), \qquad b=(b_0,b_1,b_2,\ldots), \qquad a,b\in\mathbb{F}_p^{\mathbb{N}}\]
+we may define \[a \oplus b := \phi^{-1}(\phi(a)+\phi(b)), \qquad a \otimes b := \phi^{-1}(\phi(a)\phi(b))\].
 
 \noindent This indeed defines a ring structure on $\mathbb{F}_p^{\mathbb{N}}$ that is isomorphic to $\mathbb{Z}_p$. However, the resulting formulas for the coordinates of $a\oplus b$ and $a\otimes b$ are complicated due to the carry terms appearing in the arithmetic of $p$-adic expansions.
 
-\noindent To understand this phenomenon more precisely, let $$x=\phi(a), \qquad y=\phi(b)$$.
-Then $$x=\chi(a_0)+p\chi(a_1)+p^2\chi(a_2)+\cdots$$
-and $$y=\chi(b_0)+p\chi(b_1)+p^2\chi(b_2)+\cdots$$.
+\noindent To understand this phenomenon more precisely, let \[x=\phi(a), \qquad y=\phi(b)\].
+Then \[x=\chi(a_0)+p\chi(a_1)+p^2\chi(a_2)+\cdots\]
+and \[y=\chi(b_0)+p\chi(b_1)+p^2\chi(b_2)+\cdots\].
 
-\noindent Now suppose $$ x+y=\chi(c_0)+p\chi(c_1)+p^2\chi(c_2)+\cdots$$ for some $c_i\in\mathbb{F}_p$.
+\noindent Now suppose \[ x+y=\chi(c_0)+p\chi(c_1)+p^2\chi(c_2)+\cdots\] for some $c_i\in\mathbb{F}_p$.
 \newline
-Reducing modulo $p$ immediately yields $$ c_0 = a_0 + b_0 \quad \text{in } \mathbb{F}_p$$.
+Reducing modulo $p$ immediately yields \[ c_0 = a_0 + b_0 \quad \text{in } \mathbb{F}_p\].
 
-\noindent And since $\chi(c_0)\equiv x+y \pmod p$, the difference $$x+y-\chi(c_0)$$
-is divisible by $p$. Hence there exists a unique $u_1\in\mathbb{Z}_p$ such that $$x+y-\chi(c_0)=p\,u_1$$.
+\noindent And since $\chi(c_0)\equiv x+y \pmod p$, the difference \[x+y-\chi(c_0)\]
+is divisible by $p$. Hence there exists a unique $u_1\in\mathbb{Z}_p$ such that \[x+y-\chi(c_0)=p\,u_1\].
 
-\noindent The element $u_1$ represents the carry to the next digit. We get that $$x+y-\chi(c_0)=pu_1=p\chi(c_1)+p^2\chi(c_2)+\cdots= p\bigl(\chi(c_1)+p\chi(c_2)+\cdots\bigr)$$ 
-$$\implies u_1 = \chi(c_1) + p\chi(c_2)+\cdots$$
-And the second component satisfies $$\chi(c_1)\equiv c_1 \equiv u_1 \pmod p$$.
+\noindent The element $u_1$ represents the carry to the next digit. We get that \[x+y-\chi(c_0)=pu_1=p\chi(c_1)+p^2\chi(c_2)+\cdots= p\bigl(\chi(c_1)+p\chi(c_2)+\cdots\bigr)\] 
+\[\implies u_1 = \chi(c_1) + p\chi(c_2)+\cdots\]
+And the second component satisfies \[\chi(c_1)\equiv c_1 \equiv u_1 \pmod p\].
 
-\noindent Now expanding the expression for $x+y-\chi(c_0)$ gives $$x+y-\chi(c_0) = \chi(a_0)+\chi(b_0)-\chi(a_0+b_0) + p(\chi(a_1)+\chi(b_1))+\cdots$$
+\noindent Now expanding the expression for $x+y-\chi(c_0)$ gives \[x+y-\chi(c_0) = \chi(a_0)+\chi(b_0)-\chi(a_0+b_0) + p(\chi(a_1)+\chi(b_1))+\cdots\]
 
-\noindent The term$$\chi(a_0)+\chi(b_0)-\chi(a_0+b_0)$$
+\noindent The term\[\chi(a_0)+\chi(b_0)-\chi(a_0+b_0)\]
 is always divisible by $p$, and therefore contributes to the carry term. Using the property of Teichmüller lifts
-$$\chi(t)^p=\chi(t)$$
-one obtains, modulo $p^2$, the identity $$c_0^p + p c_1=(a_0^p + p a_1) + (b_0^p + p b_1)$$.
+\[\chi(t)^p=\chi(t)\]
+one obtains, modulo $p^2$, the identity \[c_0^p + p c_1=(a_0^p + p a_1) + (b_0^p + p b_1)\].
 
-\noindent This suggests introducing the quantity $$w_1(a_0,a_1)=a_0^p + p a_1$$
-for which the addition formula becomes $$w_1(c_0,c_1)=w_1(a_0,a_1)+w_1(b_0,b_1)$$.
+\noindent This suggests introducing the quantity \[w_1(a_0,a_1)=a_0^p + p a_1\]
+for which the addition formula becomes \[w_1(c_0,c_1)=w_1(a_0,a_1)+w_1(b_0,b_1)\].
 
 \noindent In other words, although the coordinates $(a_0,a_1)$ themselves interact through a complicated carry term, the quantity $w_1$ behaves additively.
 
 \noindent This observation suggests that the arithmetic might simplify if, instead of working with the coefficients $(a_0,a_1,a_2,\ldots)$ directly, one considers suitable polynomial expressions in these coefficients.
 
 \noindent Continuing this reasoning leads naturally to the family of polynomials
-$$w_n(a_0,a_1,\ldots,a_n) = a_0^{p^n} +p a_1^{p^{\,n-1}} + p^2 a_2^{p^{\,n-2}}+\cdots+p^n a_n$$
-which are known as the \emph{Witt polynomials}. The values $$w_n(a_0,a_1,a_2,\ldots)$$ are called the \emph{ghost components} of the sequence.
+\[w_n(a_0,a_1,\ldots,a_n) = a_0^{p^n} +p a_1^{p^{\,n-1}} + p^2 a_2^{p^{\,n-2}}+\cdots+p^n a_n\]
+which are known as the \emph{Witt polynomials}. The values \[w_n(a_0,a_1,a_2,\ldots)\] are called the \emph{ghost components} of the sequence.
 
 \noindent The key property of these quantities is that, when the operations on sequences are defined appropriately, the ghost components behave like ordinary ring coordinates:
-$$ w_n(a+b)=w_n(a)+w_n(b), \qquad w_n(ab)=w_n(a)w_n(b)$$
+\[ w_n(a+b)=w_n(a)+w_n(b), \qquad w_n(ab)=w_n(a)w_n(b)\]
 
 \noindent Thus the complicated carry interactions in the Witt coordinates disappear when expressed in terms of the ghost components. This observation is the starting point of Witt's construction and will allow us to define addition and multiplication on sequences over an arbitrary ring.
 
