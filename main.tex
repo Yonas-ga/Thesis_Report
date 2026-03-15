@@ -154,39 +154,73 @@ These results are shown before the construction of Witt vectors, as they are imp
 
 In the following, let $p$ be a fixed prime number. 
 
-It is common knowledge that $\mathbb{F}_p = \mathbb{Z}/p\mathbb{Z} = \mathbb{Z}/(p)$ endowed with the usual addition and multiplication modulo $p$ is a field with a finite amount of elements. This can easily be checked, and can also be proven using the fact that the ideal $(p)$ is maximal, and that the quotient of a ring with a maximal ideal is a field.  \textbf{Maybe proof in appendix ? not sure its necessary}
+It is common knowledge that 
+\begin{proposition}
+  $\mathbb{F}_p = \mathbb{Z}/p\mathbb{Z} = \mathbb{Z}/(p)$ endowed with the usual addition and multiplication modulo $p$ is a field with a finite amount of elements.
+\end{proposition} 
+This can easily be checked, and can also be proven using the fact that the ideal $(p)$ is maximal, and that the quotient of a ring with a maximal ideal is a field.  \textbf{Maybe proof in appendix ? not sure its necessary}
 
-Now recall the construction of the Frobenius map, a fundamental map that appears in every ring $A$ of characteristic $p$: \[F: A \to A\] defined by \[F(x) = x^p\] for any ring $A$ of characteristic $p$.
-
-This ring homomorphism is well defined. Indeed, for all $x,y\in A$, one has:
-
-\[F(xy) = (xy)^p = x^p y^p = F(x)F(y).\]
-And also \[F(x+y) = (x+y)^p.\]
-Where we can utilize the fact that in modulo $p$, for all $a,b\in \mathbb{F}_p$ we have $(a+b)^p=a^p+b^p$. In fact, \[(a+b)^p = \sum_{i=0}^{p}\binom{p}{i}a^ib^{p-i} = a^p+b^p+\sum_{i=1}^{p-1}\binom{p}{i}a^ib^{p-i}.\]
-And the binomial factor $\binom{p}{i}$ is a multiple of $p$ for all $i\in\{1,\ldots,p-1\}$, so it is zero in modulo $p$, so
-\[(x+y)^p = x^p + y^p.\]
-Therefore \[F(x+y)=F(x)+F(y).\]
-And the Frobenius map is a ring homomorphism. 
-
-In fact, in the special case where $A=\mathbb{F}_p$, we get that the Frobenius map is the identity. 
-
-Let $a\in \mathbb{F}_p$. If $a=0$ then the identity holds. Else, $a\in\mathbb{F}_p^{\times}= \mathbb{F}_p\backslash\{0\}$
-and then, by Fermat's little theorem, \[a^p\equiv a \pmod p.\]
-Since $\mathbb{F}_p = \mathbb{Z}/p\mathbb{Z}$, congruence modulo $p$ becomes equality, and the Frobenius map is indeed the identity.
-
+Now recall the construction of the Frobenius map:
+\begin{definition}
+  Let $A$ be a ring of characteristic $p$. \[F: A \to A\] defined by \[F(x) = x^p\] is called the Frobenius map.
+\end{definition} 
+\begin{proposition}
+  The Frobenius map is a ring homomorphism.
+\end{proposition}
+\begin{proof}
+  For all $x,y\in A$, one has:
+  \[F(xy) = (xy)^p = x^p y^p = F(x)F(y).\]
+  And also \[F(x+y) = (x+y)^p.\]
+  Where we can utilize the fact that in modulo $p$, for all $a,b\in \mathbb{F}_p$ we have $(a+b)^p=a^p+b^p$. In fact, \[(a+b)^p = \sum_{i=0}^{p}\binom{p}{i}a^ib^{p-i} = a^p+b^p+\sum_{i=1}^{p-1}\binom{p}{i}a^ib^{p-i}.\]
+  And the binomial factor $\binom{p}{i}$ is a multiple of $p$ for all $i\in\{1,\ldots,p-1\}$, so it is zero in modulo $p$, so
+  \[(x+y)^p = x^p + y^p.\]
+  Therefore \[F(x+y)=F(x)+F(y).\]
+\end{proof}
+\begin{proposition}
+  In the case $A=\mathbb{F}_p$ the Frobenius map is the identity.
+\end{proposition}
+\begin{proof}
+  Let $a\in \mathbb{F}_p$. If $a=0$ then the identity holds. Else, $a\in\mathbb{F}_p^{\times}= \mathbb{F}_p\backslash\{0\}$
+  and then, by Fermat's little theorem, \[a^p\equiv a \pmod p.\]
+  Since $\mathbb{F}_p = \mathbb{Z}/p\mathbb{Z}$, congruence modulo $p$ becomes equality, and the Frobenius map is indeed the identity.
+\end{proof}
 From this, if $a\in\mathbb{F}_p^{\times}$ we get that $a^{p-1}\equiv1\pmod p$ by multiplying both sides by $a^{-1}$. This means that each non-zero element of $\mathbb{F}_p$ is a $(p-1)$th root of unity.
 
-\begin{theorem}[Hensel's lemma]\label{Hensel}
-Let $f(X)\in\mathbb{Z}_p[X]$, and let $a_0\in\mathbb{Z}_p$ be such that
-\[f(a_0)\equiv 0 \pmod p \qquad\text{and}\qquad f'(a_0)\not\equiv 0 \pmod p.\]
-Then there exists a unique $\alpha\in\mathbb{Z}_p$ such that
-\[ \alpha\equiv a_0 \pmod p \qquad\text{and}\qquad f(\alpha)=0.\]
-\end{theorem}
-The proof of this theorem is long, and out of scope. It can be found in the first 3 pages of (reference) if the reader is interested.
+\begin{definition}
+  Let $x\in\mathbb{Z}_p$ then \[x=\sum_{i=0}^{\infty}a_ip^i \text{  with  } a_i\in\{0,..,p-1\}.\]
+\end{definition}
+\begin{definition}
+For a nonzero integer $x\in\mathbb Z$, the \emph{$p$-adic valuation} $v_p(x)$ is defined as the largest integer $k\ge0$ such that
+\[p^k \mid x.\]
+We set $v_p(0)=\infty$.
+\end{definition}
+\begin{definition}
+The \emph{$p$-adic absolute value} on $\mathbb Z$ is defined by \[|x|_p = p^{-v_p(x)}, \qquad |0|_p=0.\]
+\end{definition}
+
+This absolute value satisfies\[|xy|_p = |x|_p |y|_p\]
+
+and the inequality \[|x+y|_p \le \max(|x|_p,|y|_p).\]
+
+\begin{definition}
+A sequence $(x_n)$ of integers is called \emph{$p$-adically Cauchy} if for every $k\ge1$ there exists $N$ such that
+\[x_m-x_n \in p^k\mathbb Z\qquad\text{for all } m,n\ge N.\]
+\end{definition}
+The ring of \emph{$p$-adic integers} $\mathbb Z_p$ is defined as the completion of $\mathbb Z$ with respect to this notion of Cauchy sequence. Elements of $\mathbb Z_p$ can therefore be represented as limits of $p$-adically Cauchy sequences of integers.
+The ring $\mathbb Z_p$ is complete with respect to the $p$-adic topology.
+
+A sequence $(x_n)$ in $\mathbb Z_p$ converges to $0$ if and only if
+\[v_p(x_n) \to \infty.\]
+
+In particular,\[p^n \to 0\qquad\text{in } \mathbb Z_p,\] since $v_p(p^n)=n$.
+
+More generally, if $x_n\in\mathbb Z_p$, then \[p^n x_n \to 0.\]
+
+Finally, polynomial maps are continuous for the $p$-adic topology. In particular the map \[x \mapsto x^p\] is continuous on $\mathbb Z_p$.
 
 \subsection{Construction from p-adic expansions}
 
-There are multiple ways of introducing Witt vectors. Most references state the definition of Witt vectors and work with them directly. We will instead construct Witt vectors from scratch, to try and make sense of the definition and understand the object.
+There are multiple ways of introducing Witt vectors. Instead of just stating the definitions, we will try to follow the thought process which leads to the creation of these definitions. 
 
 We will first show how the idea of Witt vectors come to light naturally, then how one comes to the idea of ghost components, finally we will show how the operations result in sum and product polynomials.
 \newline
@@ -218,9 +252,6 @@ Equivalently, we require \[ \chi(a)\equiv a \pmod p.\]
 In order for this lift to interact well with the arithmetic in characteristic $p$, it is natural to impose the additional condition that $\chi(a)$ be fixed by Frobenius: \[\chi(a)^p=\chi(a).\]
 Thus we are now looking for elements $x\in\mathbb{Z}_p$ satisfying $x^p=x$.
 
-Solving this equation gets us: \[x^p=x \Longleftrightarrow x(x^{p-1}-1)=0.\]
-That is, $x$ is either $0$ or a $(p-1)$th root of unity.
-
 In fact such a lift exists, and it is unique. 
 
 \begin{proposition}
@@ -234,31 +265,50 @@ First consider the case $a=0$. Then $x=0$ clearly satisfies
 \[ x\equiv 0 \pmod p\qquad\text{and}\qquad x^p=x\]
 and it is the unique such element. It is unique, since if $x\ne 0$ then $x=pk$ for some $k\in\mathbb{Z}_p$, and then $x^p=p^pk^p=pkp^{p-1}k^{p-1}=xp^{p-1}k^{p-1}\ne x$.
 
-Now let $a\in\mathbb{F}_p^\times$. We look for $x\in\mathbb{Z}_p$ such that
-\[x\equiv a \pmod p \qquad\text{and}\qquad x^p=x.\]
-Since $x$ is nonzero, the equation $x^p=x$ is equivalent to \[x^{p-1}=1.\]
-Now, consider the polynomial \[f(X)=X^{p-1}-1\in\mathbb{Z}_p[X].\]
-Because $a\in\mathbb{F}_p^\times$, from Subsection \ref{subsec:background} we get that 
-\[f(a)=a^{p-1}-1=0\equiv 0 \pmod p.\]
-Moreover, \[f'(X)=(p-1)X^{p-2}\]
-so \[ f'(a)=(p-1)a^{p-2}\not\equiv 0 \pmod p\]
-since $a\neq 0$ and $p-1\not\equiv 0\pmod p$.
 
-Therefore, by Hensel’s lemma \ref{Hensel}, there exists a unique $\widetilde a\in\mathbb{Z}_p$ such that
-\[\widetilde a\equiv a \pmod p \qquad\text{and}\qquad f(\widetilde a)=0\]
-And so, \[f(\widetilde a)=\widetilde a^{p-1}-1= 0\implies \widetilde a^{p-1}=1.\]
-Since $\widetilde a\neq 0$, multiplying both sides by $\widetilde a$ yields \[\widetilde a^p=\widetilde a.\]
-We now define $\chi(a):=\widetilde a$.
+Now let $a\in\mathbb{F}_p^\times$. Choose its standard representative
+$a\in\{1,\dots,p-1\}\subset\mathbb{Z}\subset\mathbb{Z}_p$.
+Define a sequence $(x_n)_{n\ge0}$ in $\mathbb{Z}_p$ by
+\[x_n:=a^{p^n}.\]
 
-This proves that for every $a\in\mathbb{F}_p$ there exists a unique element $\chi(a)\in\mathbb{Z}_p$ satisfying
-\[\chi(a)\equiv a \pmod p \qquad\text{and}\qquad \chi(a)^p=\chi(a)\].
+We claim that $(x_n)$ is a Cauchy sequence in $\mathbb{Z}_p$. Since
+\[x_{n+1}=x_n^p,\]
+and since $x_n\equiv a \pmod p$, we have
+\[x_{n+1}=x_n^p\equiv x_n \pmod p.\]
+More generally, applying Lemma \ref{equiv+i} repeatedly gives
+\[x_{n+1}=x_n^p \equiv x_n \pmod{p^{n+1}}.\]
+Thus
+\[x_{n+1}-x_n\in p^{n+1}\mathbb{Z}_p,\]
+so $(x_n)$ is Cauchy. Since $\mathbb{Z}_p$ is complete, there exists
+$x\in\mathbb{Z}_p$ such that
+\[x_n\to x.\]
+
+Because $x_n\equiv a \pmod p$ for all $n$, passing to the limit gives
+\[x\equiv a \pmod p.\]
+Also, the map $t\mapsto t^p$ is continuous on $\mathbb{Z}_p$, so
+\[x^p=\lim_{n\to\infty} x_n^p=\lim_{n\to\infty} x_{n+1}=x.\]
+We therefore define $\chi(a):=x$.
+
+This proves existence.
+
+To prove uniqueness, let $x,y\in\mathbb{Z}_p$ satisfy
+\[x\equiv a \pmod p,\qquad y\equiv a \pmod p,\qquad x^p=x,\qquad y^p=y.\]
+Then $x\equiv y\pmod p$. By Lemma \ref{equiv+i},
+\[x^{p^n}\equiv y^{p^n}\pmod{p^{n+1}}\qquad\text{for all } n\ge0.\]
+Since $x^p=x$ and $y^p=y$, this becomes
+\[x\equiv y\pmod{p^{n+1}}\qquad\text{for all } n\ge0.\]
+Hence $x-y\in \bigcap_{n\ge1} p^n\mathbb{Z}_p=\{0\}$, so $x=y$.
+
+Thus for every $a\in\mathbb{F}_p$ there exists a unique element
+$\chi(a)\in\mathbb{Z}_p$ satisfying
+\[\chi(a)\equiv a \pmod p\qquad\text{and}\qquad\chi(a)^p=\chi(a).\]
 \end{proof}
 
 Having chosen a canonical lift of each element of $\mathbb{F}_p$, we may now define a map
 \[\phi:\mathbb{F}_p^{\mathbb N}\to \mathbb{Z}_p\]
 by
 \[\phi((a_0,a_1,a_2,\ldots))=\chi(a_0)+p\chi(a_1)+p^2\chi(a_2)+\cdots.\]
-This is a well-defined element of $\mathbb{Z}_p$, and it expresses a $p$-adic integer in terms of Teichmüller representatives.
+This is a well-defined element of $\mathbb{Z}_p$, as it is a sum of elements of $\mathbb{Z}_p$, and it expresses a $p$-adic integer in terms of Teichmüller representatives.
 
 Moreover, every element of $\mathbb{Z}_p$ admits a unique expansion of this form, by construction of $\mathbb{Z}_p$. Therefore, $\phi$ is a bijection of sets
 \[\phi:\mathbb{F}_p^{\mathbb N}\xrightarrow{\sim}\mathbb{Z}_p.\]
