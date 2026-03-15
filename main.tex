@@ -43,6 +43,8 @@ Later
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
 \newtheorem{proposition}{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
 
 %% \predate{}
 %% \postdate{}
@@ -137,9 +139,9 @@ Later
 \section{Introduction}
 
 \subsection{Motivation}
-Witt vector rings are algebraic objects with multiple useful properties such as the possibilty of \emph{lifting} rings from characteristic $p$, with $p$ a prime, to characteristic $0$, as well as being an alternative way of constructing \emph{p-adic numbers}. 
+Witt vector rings are algebraic objects with multiple useful properties such as the possibility of \emph{lifting} rings from characteristic $p$, with $p$ a prime, to characteristic $0$, as well as being an alternative way of constructing \emph{p-adic numbers}. 
 
-Computationally we use truncated Witt vectors, the finite counterpart to Witt vectors, as it has the same properties in the finite case. The problem is that the construction of the Witt vector polynomials are of exponential complexity, both in $p$ and in the lenght of the trunacated Witt vectors, called \emph{precision}.
+Computationally we use truncated Witt vectors, the finite counterpart to Witt vectors, as it has the same properties in the finite case. The problem is that the construction of the Witt vector polynomials are of exponential complexity, both in $p$ and in the length of the trunacated Witt vectors, called \emph{precision}.
 
 So caching etc is important.
 
@@ -172,7 +174,7 @@ Let $a\in \mathbb{F}_p$. If $a=0$ then the identity holds. Else, $a\in\mathbb{F}
 and then, by Fermat's little theorem, \[a^p\equiv a \pmod p.\]
 Since $\mathbb{F}_p = \mathbb{Z}/p\mathbb{Z}$, congruence modulo $p$ becomes equality, and the Frobenius map is indeed the identity.
 
-From this, if $a\in\mathbb{F}_p^{\times}$ we get that $a^{p-1}\equiv1\pmod p$ by multplying both sides by $a^{-1}$. This means that each non-zero element of $\mathbb{F}_p$ is a $(p-1)$th root of unity.
+From this, if $a\in\mathbb{F}_p^{\times}$ we get that $a^{p-1}\equiv1\pmod p$ by multiplying both sides by $a^{-1}$. This means that each non-zero element of $\mathbb{F}_p$ is a $(p-1)$th root of unity.
 
 \begin{theorem}[Hensel's lemma]\label{Hensel}
 Let $f(X)\in\mathbb{Z}_p[X]$, and let $a_0\in\mathbb{Z}_p$ be such that
@@ -182,8 +184,7 @@ Then there exists a unique $\alpha\in\mathbb{Z}_p$ such that
 \end{theorem}
 The proof of this theorem is long, and out of scope. It can be found in the first 3 pages of (reference) if the reader is interested.
 
-\subsection{As mathetical objects}
-Why ? How ? Construction from basic math and up.
+\subsection{Construction from p-adic expansions}
 
 There are multiple ways of introducing Witt vectors. Most references state the definition of Witt vectors and work with them directly. We will instead construct Witt vectors from scratch, to try and make sense of the definition and understand the object.
 
@@ -196,22 +197,22 @@ Every $p$-adic integer $s \in \mathbb{Z}_p$ admits a unique expansion of the for
 
 Since the set $\{0,1,\ldots,p-1\}$ is bijective to $\mathbb{F}_p$, each $p$-adic number can be uniquely represented by a sequence $(a_0,a_1,a_2,\ldots)$ with $a_i \in \mathbb{F}_p$.
 
-This suggests that there may exist a way of reconstructing $\mathbb{Z}_p$ from $\mathbb{F}_p^{\mathbb{N}}$. We now investigate whether such a reconstruction can be made into a ring-theoretic one.
+A natural first idea is to try to reconstruct a $p$-adic integer directly from a sequence
+\[(a_0,a_1,a_2,\ldots)\in \mathbb{F}_p^{\mathbb N}\]
+by forming the formal expression
+\[a_0+a_1p+a_2p^2+\cdots.\]
+However, this expression is not yet meaningful in $\mathbb{Z}_p$, because the coefficients $a_i$ lie in $\mathbb{F}_p$, whereas a $p$-adic expansion requires coefficients in $\mathbb{Z}_p$.
 
-Since $\mathbb{Z}_p$ is a ring, we need to endow $\mathbb{F}_p^{\mathbb{N}}$ with a ring structure that support the arithmetic of $p$-adic integers. However this cannot be done using componentwise operations because of the carry arithmetic involved in addition and multiplication of $p$-adic integers. For example:
-\[(1,0,0,\ldots)+(p-1,0,0,\ldots)=(0,0,0,\ldots)\] under componentwise addition in $\mathbb{F}_p^{\mathbb{N}}$ whereas \[1+(p-1)=p\] in $\mathbb{Z}_p$ corresponds to \[(0,1,0,\ldots)\ne (0,0,0,\ldots).\]
+We therefore need a way to choose, for each element of $\mathbb{F}_p$, a distinguished representative in $\mathbb{Z}_p$. In other words, we seek a map
+\[\chi:\mathbb{F}_p\to\mathbb{Z}_p\]
+which is a section of the reduction map
+\[\pi:\mathbb{Z}_p\to\mathbb{F}_p,\qquad \pi(x)=x \bmod p.\]
+By definition, this means that
+\[\pi(\chi(a))=a\qquad \text{for all } a\in\mathbb{F}_p.\]
+Equivalently, we require
+\[\chi(a)\equiv a \pmod p.\]
 
-Thus the correct ring structure on $\mathbb{F}_p^{\mathbb{N}}$ cannot be the naive componentwise one.
-
-
-A first idea would be to define a map
-\[\phi:\mathbb{F}_p^{\mathbb{N}}\to\mathbb{Z}_p \]
-such that: \[\phi((a_0,a_1,a_2,\ldots))=a_0+a_1p+a_2p^2+\ldots\]
-but such a construction is not yet well-defined, since the coefficients $a_i$ lie in $\mathbb{F}_p$, whereas the series is an element of $\mathbb{Z}_p$. 
-
-We must therefore choose, for each coefficient in $\mathbb{F}_p$, a canonical lift to $\mathbb{Z}_p$. In other words, we seek a map \[\chi:\mathbb{F}_p\to\mathbb{Z}_p\]
-which is a section (ie. some kind of inverse on $\mathbb{F}_p$) of the reduction map \[\pi:\mathbb{Z}_p\to\mathbb{F}_p,\qquad \pi(x)=x \bmod p\]
-so that \[\pi(\chi(a))=a \qquad\text{for all } a\in\mathbb{F}_p.\]
+Then \[\pi(\chi(a))=a \qquad\text{for all } a\in\mathbb{F}_p.\]
 Equivalently, we require \[ \chi(a)\equiv a \pmod p.\]
 
 In order for this lift to interact well with the arithmetic in characteristic $p$, it is natural to impose the additional condition that $\chi(a)$ be fixed by Frobenius: \[\chi(a)^p=\chi(a).\]
@@ -231,13 +232,13 @@ This map $\chi:\mathbb{F}_p\to\mathbb{Z}_p$ is called the Teichmüller lift.
 \begin{proof}
 First consider the case $a=0$. Then $x=0$ clearly satisfies
 \[ x\equiv 0 \pmod p\qquad\text{and}\qquad x^p=x\]
-and it is the unique such element.
+and it is the unique such element. It is unique, since if $x\ne 0$ then $x=pk$ for some $k\in\mathbb{Z}_p$, and then $x^p=p^pk^p=pkp^{p-1}k^{p-1}=xp^{p-1}k^{p-1}\ne x$.
 
 Now let $a\in\mathbb{F}_p^\times$. We look for $x\in\mathbb{Z}_p$ such that
 \[x\equiv a \pmod p \qquad\text{and}\qquad x^p=x.\]
 Since $x$ is nonzero, the equation $x^p=x$ is equivalent to \[x^{p-1}=1.\]
 Now, consider the polynomial \[f(X)=X^{p-1}-1\in\mathbb{Z}_p[X].\]
-Because $a\in\mathbb{F}_p^\times$, from Subsecton \ref{subsec:background} we get that 
+Because $a\in\mathbb{F}_p^\times$, from Subsection \ref{subsec:background} we get that 
 \[f(a)=a^{p-1}-1=0\equiv 0 \pmod p.\]
 Moreover, \[f'(X)=(p-1)X^{p-2}\]
 so \[ f'(a)=(p-1)a^{p-2}\not\equiv 0 \pmod p\]
@@ -253,13 +254,86 @@ This proves that for every $a\in\mathbb{F}_p$ there exists a unique element $\ch
 \[\chi(a)\equiv a \pmod p \qquad\text{and}\qquad \chi(a)^p=\chi(a)\].
 \end{proof}
 
-We may now define
-\[\phi((a_0,a_1,a_2,\ldots)) = \chi(a_0)+\chi(a_1)p+\chi(a_2)p^2+\cdots\]
-which is a well-defined element of $\mathbb{Z}_p$. Thus every sequence in $\mathbb{F}_p^{\mathbb{N}}$ gives rise to a $p$-adic expansion with Teichmüller representatives as coefficients.
+Having chosen a canonical lift of each element of $\mathbb{F}_p$, we may now define a map
+\[\phi:\mathbb{F}_p^{\mathbb N}\to \mathbb{Z}_p\]
+by
+\[\phi((a_0,a_1,a_2,\ldots))=\chi(a_0)+p\chi(a_1)+p^2\chi(a_2)+\cdots.\]
+This is a well-defined element of $\mathbb{Z}_p$, and it expresses a $p$-adic integer in terms of Teichmüller representatives.
 
-The map $\phi$ provides a bijection between $\mathbb{F}_p^{\mathbb{N}}$ and $\mathbb{Z}_p$. One might then attempt to transport the ring structure of $\mathbb{Z}_p$ to $\mathbb{F}_p^{\mathbb{N}}$ with $\phi$. 
-In other words, for two sequences \[a=(a_0,a_1,a_2,\ldots), \qquad b=(b_0,b_1,b_2,\ldots), \qquad a,b\in\mathbb{F}_p^{\mathbb{N}}\]
-we may define \[a \oplus b := \phi^{-1}(\phi(a)+\phi(b)), \qquad a \otimes b := \phi^{-1}(\phi(a)\phi(b)).\]
+Moreover, every element of $\mathbb{Z}_p$ admits a unique expansion of this form, by construction of $\mathbb{Z}_p$. Therefore, $\phi$ is a bijection of sets
+\[\phi:\mathbb{F}_p^{\mathbb N}\xrightarrow{\sim}\mathbb{Z}_p.\]
+
+We now investigate whether such a reconstruction can be made into a ring-theoretic one.
+
+Since $\mathbb{Z}_p$ is a ring, we need to endow $\mathbb{F}_p^{\mathbb{N}}$ with a ring structure that support the arithmetic of $p$-adic integers. However this cannot be done using componentwise operations because of the carry arithmetic involved in addition and multiplication of $p$-adic integers. For example:
+\[(1,0,0,\ldots)+(p-1,0,0,\ldots)=(0,0,0,\ldots)\] under componentwise addition in $\mathbb{F}_p^{\mathbb{N}}$ whereas \[1+(p-1)=p\] in $\mathbb{Z}_p$ corresponds to \[(0,1,0,\ldots)\ne (0,0,0,\ldots).\]
+
+Thus the correct ring structure on $\mathbb{F}_p^{\mathbb{N}}$ cannot be the naive componentwise one. Instead, we will try to transpose the ring structure of $\mathbb{Z}_p$ to $\mathbb{F}_p^{\mathbb{N}}$ using $\phi$. But first, lets prove that $\phi$ is a bijection.
+
+\begin{proposition}
+The map
+\[\phi:\mathbb F_p^{\mathbb N}\to \mathbb Z_p,\qquad (a_0,a_1,a_2,\ldots)\mapsto \sum_{i=0}^\infty p^i\chi(a_i)\]
+is a bijection.
+\end{proposition}
+
+\begin{proof}
+We first prove injectivity.
+
+Let
+\[a=(a_0,a_1,a_2,\ldots), \qquad b=(b_0,b_1,b_2,\ldots)\in\mathbb F_p^{\mathbb N}\]
+and suppose that $\phi(a)=\phi(b)$. Then
+\[\chi(a_0)+p\chi(a_1)+p^2\chi(a_2)+\cdots=\chi(b_0)+p\chi(b_1)+p^2\chi(b_2)+\cdots.\]
+Reducing modulo $p$, we obtain
+\[\chi(a_0)\equiv \chi(b_0)\pmod p.\]
+Applying the reduction map and using that $\pi\circ\chi=\mathrm{id}_{\mathbb F_p}$, it follows that
+\[a_0=b_0.\]
+
+Subtracting the common first term and dividing by $p$, we get
+\[\chi(a_1)+p\chi(a_2)+p^2\chi(a_3)+\cdots=\chi(b_1)+p\chi(b_2)+p^2\chi(b_3)+\cdots.\]
+Reducing again modulo $p$, we obtain $a_1=b_1$.
+
+Repeating this argument inductively shows that $a_i=b_i$ for all $i\ge 0$. Hence $a=b$, and $\phi$ is injective.
+
+We now prove surjectivity.
+
+Let $x\in\mathbb Z_p$. We will construct a sequence
+\[(a_0,a_1,a_2,\ldots)\in\mathbb F_p^{\mathbb N}\]
+such that
+\[x=\sum_{i=0}^\infty p^i\chi(a_i).\]
+
+Let $a_0:=\pi(x)\in\mathbb F_p$. Since $\pi(\chi(a_0))=a_0=\pi(x)$, we have
+\[x-\chi(a_0)\in p\mathbb Z_p.\]
+Hence there exists $x_1\in\mathbb Z_p$ such that
+\[x=\chi(a_0)+px_1.\]
+
+Next, let $a_1:=\pi(x_1)\in\mathbb F_p$. Again, since
+\[\pi(\chi(a_1))=a_1=\pi(x_1),\]
+we have
+\[x_1-\chi(a_1)\in p\mathbb Z_p.\]
+Thus there exists $x_2\in\mathbb Z_p$ such that
+\[x_1=\chi(a_1)+px_2.\]
+Substituting into the previous equality gives
+\[x=\chi(a_0)+p\chi(a_1)+p^2x_2.\]
+
+Continuing inductively, we construct sequences $(a_n)_{n\ge0}$ in $\mathbb F_p$
+and $(x_n)_{n\ge0}$ in $\mathbb Z_p$ such that
+\[x=\chi(a_0)+p\chi(a_1)+\cdots+p^n\chi(a_n)+p^{n+1}x_{n+1}\qquad\text{for all } n\ge0.\]
+
+Now the remainder term $p^{n+1}x_{n+1}$ tends to $0$ in $\mathbb Z_p$ as
+$n\to\infty$, because $x_{n+1}\in\mathbb Z_p$. Therefore
+\[x=\sum_{i=0}^\infty p^i\chi(a_i).\]
+Thus
+\[x=\phi((a_0,a_1,a_2,\ldots)),\]
+and so $\phi$ is surjective.
+
+Therefore $\phi$ is bijective.
+\end{proof}
+
+\subsection{Ghost components}
+
+Because the map $\phi$ provides a bijection between $\mathbb{F}_p^{\mathbb{N}}$ and $\mathbb{Z}_p$, we will try to endow $\mathbb{F}_p$ with a ring structure, using the already established one in $\mathbb{Z}_p$.
+Let us try to define, for two sequences \[a=(a_0,a_1,a_2,\ldots), \qquad b=(b_0,b_1,b_2,\ldots), \qquad a,b\in\mathbb{F}_p^{\mathbb{N}}\]
+the operations \[a \oplus b := \phi^{-1}(\phi(a)+\phi(b)), \qquad a \otimes b := \phi^{-1}(\phi(a)\phi(b)).\]
 
 This indeed defines a ring structure on $\mathbb{F}_p^{\mathbb{N}}$ that is isomorphic to $\mathbb{Z}_p$. However, the resulting formulas for the coordinates of $a\oplus b$ and $a\otimes b$ are complicated due to the carry terms appearing in the arithmetic of $p$-adic expansions.
 
@@ -286,9 +360,9 @@ For $x,y\in \mathbb{F}_p$, If $x\equiv y \pmod p$ then $x^{p^i}\equiv y^{p^i} \p
 \end{lemma}
 \begin{proof}
   We will proceed by recursion on $i\in\mathbb{N}$, with the case $i=0$ being the hypothesis.
-  Suppose now that for $i\in\mathbb{N}$ we have $x^{p^i}\equiv y^{p^i} \pmod p^{i+1}$. We can write \[x^{p^i}=y^{p^i}p^{i+1}\implies x^{p^{i+1}}=\bigl(y^{p^i}p^{i+1}\bigr)^p.\]
-  Now expanding with Newton's binomial theorem, \[x^{p^{i+1}}=\bigl(y^{p^i}p^{i+1}\bigr)^p=y^{p^i}+p^{p(i+1)}+\sum_{k=0}^{p-1}\binom{p}{k}y^{p^{i}(p-k)}p^{k(i+1)}.\]
-  For $k\in\{1,\ldots,p-1\}$ we have \[\binom{p}{k}\mid p \implies \binom{p}{k}y^{p^{i}(p-k)}p^{p(i+1)}\mid p^{i+2}.\]
+  Suppose now that for $i\in\mathbb{N}$ we have $x^{p^i}\equiv y^{p^i} \pmod {p^{i+1}}$. We can write, for some $\alpha \in\mathbb{F}_p $ \[x^{p^i}=y^{p^i}+\alpha p^{i+1}\implies x^{p^{i+1}}=\bigl(y^{p^i}+\alpha p^{i+1}\bigr)^p.\]
+  Now expanding with Newton's binomial theorem, \[x^{p^{i+1}}=\bigl(y^{p^(i+1)}+\alpha p^{i+1}\bigr)^p=y^{p^i}+\alpha^p p^{p(i+1)}+\sum_{k=0}^{p-1}\binom{p}{k}y^{p^{i}(p-k)}\alpha^k p^{k(i+1)}.\]
+  For $k\in\{1,\ldots,p-1\}$ we have \[\binom{p}{k}\mid p \implies \binom{p}{k}y^{p^{i}(p-k)}\alpha^k p^{k(i+1)}\mid p^{i+2}.\]
   And \[p^{p(i+1)}\mid p^{i+2} \text{ since }p\geq 2.\]
   We indeed get that $x^{p^{i+1}}\equiv y^{p^{i+1}} \pmod {p^{i+2}}$.
 \end{proof}
@@ -296,7 +370,7 @@ Trying to find $c_1$ using the congruence above, we get \[\chi(c_1)p \equiv \chi
 
 Using that $\chi(c_0) \equiv \chi(a_0) + \chi(b_0) \pmod{p}$ we get that $\chi(a_0) + \chi(b_0) - \chi(c_0)  \mid p$ so we can divide by $p$ \begin{equation}\chi(c_1) \equiv  \chi(a_1) +  \chi(b_1) + \frac{\chi(a_0) + \chi(b_0) - \chi(c_0)}{p}\pmod{p}.\end{equation}\label{congruence}
 Now using the lemma \ref{equiv+i} and the properties of the Teichmüller lift, we get that: \[\chi(c_0) \equiv \chi(a_0) + \chi(b_0) \pmod{p} \implies \chi(c_0)^p \equiv \bigl(\chi(a_0) + \chi(b_0)\bigr)^p \pmod{p^2}\]\[ \implies \chi(c_0) \equiv \bigl(\chi(a_0) + \chi(b_0)\bigr)^p \pmod{p^2} \]
-We will expand Newtons binomial $\bigl(\chi(a_0) + \chi(b_0)\bigr)^p=\chi(a_0)^p+\chi(b_0)^p+\sum_{k=1}^{p-1}\binom{p}{k}\chi(a_0)^k\chi(b_0)^{p-k}$. 
+We will expand Newton's binomial theorem $\bigl(\chi(a_0) + \chi(b_0)\bigr)^p=\chi(a_0)^p+\chi(b_0)^p+\sum_{k=1}^{p-1}\binom{p}{k}\chi(a_0)^k\chi(b_0)^{p-k}$. 
 Now note that \[\binom{p}{k}=\frac{p!}{k!(p-k)!}\implies \binom{p}{k}\mid p \text{ and } \binom{p}{k}\nmid p^2 \text{ for } k\in\{1,\ldots,p-1\}.\]
 So \[\chi(c_0) \equiv \chi(a_0)+\chi(b_0)+p(\chi(a_0)^{p-1}\chi(b_0)+\ldots+\chi(a_0)\chi(b_0)^{p-1}) \pmod{p^2}.\]
 Reordering gets us \[\chi(a_0)+\chi(b_0)-\chi(c_0)\equiv -p(\chi(a_0)^{p-1}\chi(b_0)+\ldots+\chi(a_0)\chi(b_0)^{p-1})\pmod{p^2}.\]
@@ -305,49 +379,176 @@ Now injecting this into \ref{congruence} gets us \[\chi(c_1) \equiv  \chi(a_1) +
 \[c_1 \equiv a_1 + b_1 -(a_0^{p-1}b_0+\ldots+a_0b_0^{p-1}) \pmod{p}.\]
 So \[c_1 = a_1 + b_1 -(a_0^{p-1}b_0+\ldots+a_0b_0^{p-1})\] since we have elements in $\mathbb{F}_p$.
 
-As you can see, this computation is quite heavy because of the \emph{carry term}, and it becomes even more complicated when computing more. Instead, one could go back to \ref{original_congruence} and use the lemma \ref{equiv+i} to get:
+As you can see, this computation is quite heavy because of the \emph{carry term}, and it becomes even more complicated when computing more. One idea to make this computation easier, is to change the coordinate system into one that has easy addition. Looking back at \ref{original_congruence} and using the lemma \ref{equiv+i} we get:
 \begin{align*}
 \chi(c_0) &\equiv \chi(a_0) + \chi(b_0) \pmod{p} \\
 \chi(c_0)^p + \chi(c_1)p &\equiv \chi(a_0)^p + \chi(a_1)p + \chi(b_0)^p + \chi(b_1)p \pmod{p^2} \\
 \chi(c_0)^{p^2} + \chi(c_1)^pp + \chi(c_2)p^2 &\equiv \chi(a_0)^{p^2} + \chi(a_1)^pp + \chi(a_2)p^2  + \chi(b_0)^{p^2} + \chi(b_1)^pp + \chi(b_2)p^2 \pmod{p^3} \\
 &\vdots
 \end{align*}
+From this, one could define:
+\begin{definition}
+For a sequence $a=(a_0,a_1,a_2,\ldots)\in\mathbb{F}_p^{\mathbb{N}}$, define its $n$-th ghost component by
+\[w_n(a)=a_0^{p^n}+pa_1^{p^{n-1}}+p^2a_2^{p^{n-2}}+\cdots+p^n a_n.\]
+The family $(w_0(a),w_1(a),w_2(a),\ldots)$ is called the sequence of ghost components of $a$.
 
 
-Reducing modulo $p$ immediately yields \[ c_0 = a_0 + b_0 \quad \text{in } \mathbb{F}_p.\]
+The map
+\[w:\mathbb{F}_p^{\mathbb N}\to \mathbb{Z}_p^{\mathbb N},\qquad a\mapsto (w_0(a),w_1(a),w_2(a),\ldots)\]
+is called the ghost map.
+\end{definition}
+The name \emph{ghost components} reflects the fact that these are not the original coordinates of the Witt vector, but rather polynomial expressions in those coordinates. They are auxiliary quantities, invisible from the point of view of the original sequence, yet they encode the arithmetic in a much simpler way, allowing for easier computations.
+With this notation, the congruences obtained above can be rewritten in the form
+\[w_0(c)\equiv w_0(a)+w_0(b)\pmod p,\]
+\[w_1(c)\equiv w_1(a)+w_1(b)\pmod{p^2},\]
+\[w_2(c)\equiv w_2(a)+w_2(b)\pmod{p^3},\]
+and so on. The ghost components behave additively modulo the appropriate power of $p$.
+\subsection{Universal Witt polynomials}
+Now that we have logically introduced the idea of \emph{ghost components} when trying to lift $\mathbb{F}_p$ into a characteristic $0$ ring, namely $\mathbb{Z}_p$, we will instead broaden this logic to any commutative ring $A$. To do so, we will first restate \ref{equiv+i} in $A$, then state and prove an auxiliary lemma to finally prove the uniqueness and existence of the sum and product polynomials, which define a ring structure on $W(A)=A^{\mathbb{N}}$.
 
-And since $\chi(c_0)\equiv x+y \pmod p$, the difference \[x+y-\chi(c_0)\]
-is divisible by $p$. Hence there exists a unique $u_1\in\mathbb{Z}_p$ such that \[x+y-\chi(c_0)=p\,u_1.\]
+\begin{lemma}\label{equiv_A}
+  Let $A$ be a commutative ring. For $x,y\in A$, If $x\equiv y \pmod pA$ then $x^{p^i}\equiv y^{p^i} \pmod {p^{i+1}A}$ for every $i\in\mathbb{N}$.
+\end{lemma}
+\begin{proof}
+  The proof is very similar to its counterpart for $A=\mathbb{F}_p$. It is in the appendix \ref{sec:appendix}.
+\end{proof}
 
-The element $u_1$ represents the carry to the next digit. We get that \[x+y-\chi(c_0)=pu_1=p\chi(c_1)+p^2\chi(c_2)+\cdots= p\bigl(\chi(c_1)+p\chi(c_2)+\cdots\bigr)\] 
-\[\implies u_1 = \chi(c_1) + p\chi(c_2)+\cdots\]
-And the second component satisfies \[\chi(c_1)\equiv c_1 \equiv u_1 \pmod p.\]
+\begin{lemma}\label{lemma:frobenius_congruence}
+Let $A$ be a commutative ring, and let $\varphi:A\to A$ be a ring endomorphism such that
+\[\varphi(a)\equiv a^p \pmod{pA}\qquad \text{for all } a\in A.\]
+Let $(u_n)_{n\geq 0}$ be a sequence of elements of $A$ satisfying
+\[\varphi(u_n)\equiv u_{n+1}\pmod{p^{n+1}A}\qquad \text{for all } n\geq 0.\]
+Then there exists a unique sequence $(z_n)_{n\geq 0}$ in $A$ such that
+\[u_n=z_0^{p^n}+pz_1^{p^{n-1}}+\cdots+p^n z_n\qquad \text{for all } n\geq 0.\]
+\end{lemma}
 
-Now expanding the expression for $x+y-\chi(c_0)$ gives \[x+y-\chi(c_0) = \chi(a_0)+\chi(b_0)-\chi(a_0+b_0) + p(\chi(a_1)+\chi(b_1))+\cdots\]
+\begin{proof}
 
-The term\[\chi(a_0)+\chi(b_0)-\chi(a_0+b_0)\]
-is always divisible by $p$, and therefore contributes to the carry term. Using the property of Teichmüller lifts
-\[\chi(t)^p=\chi(t)\]
-one obtains, modulo $p^2$, the identity \[c_0^p + p c_1=(a_0^p + p a_1) + (b_0^p + p b_1).\]
+We prove existence and uniqueness simultaneously by induction on $n$.
 
-This suggests introducing the quantity \[w_1(a_0,a_1)=a_0^p + p a_1\]
-for which the addition formula becomes \[w_1(c_0,c_1)=w_1(a_0,a_1)+w_1(b_0,b_1).\]
+For $n=0$, the required identity is simply
+\[u_0=z_0,\]
+so we must take
+\[z_0=u_0.\]
 
-In other words, although the coordinates $(a_0,a_1)$ themselves interact through a complicated carry term, the quantity $w_1$ behaves additively.
+Now suppose that $z_0,\dots,z_{n-1}$ have already been constructed so that
+\[u_m=z_0^{p^m}+pz_1^{p^{m-1}}+\cdots+p^m z_m\qquad \text{for all } m\le n-1.\]
+We now show that $z_n$ exists and is uniquely determined.
 
-This observation suggests that the arithmetic might simplify if, instead of working with the coefficients $(a_0,a_1,a_2,\ldots)$ directly, one considers suitable polynomial expressions in these coefficients.
+Consider the expression
+\[N_n:=u_n-\bigl(z_0^{p^n}+pz_1^{p^{n-1}}+\cdots+p^{n-1}z_{n-1}^p\bigr).\]
+We claim that $N_n$ is divisible by $p^n$ in $A$.
 
-Continuing this reasoning leads naturally to the family of polynomials
-\[w_n(a_0,a_1,\ldots,a_n) = a_0^{p^n} +p a_1^{p^{\,n-1}} + p^2 a_2^{p^{\,n-2}}+\cdots+p^n a_n\]
-which are known as the \emph{Witt polynomials}. The values \[w_n(a_0,a_1,a_2,\ldots)\] are called the \emph{ghost components} of the sequence.
+Indeed, from the induction hypothesis applied to $u_{n-1}$, we have
+\[u_{n-1}=z_0^{p^{n-1}}+pz_1^{p^{n-2}}+\cdots+p^{n-1}z_{n-1}.\]
+Applying $\varphi$, we get
+\[\varphi(u_{n-1})=\varphi(z_0)^{p^{n-1}}+p\,\varphi(z_1)^{p^{n-2}}+\cdots+p^{n-1}\varphi(z_{n-1}).\]
+Since $\varphi(a)\equiv a^p\pmod{pA}$ for every $a\in A$, one has
+\[\varphi(z_i)=z_i^p+p\,b_i\]
+for some $b_i\in A$.
+Hence
+\[\varphi(z_i)^{p^{n-1-i}}\equiv z_i^{p^{n-i}}\pmod{p^{\,n-i}A}.\]
+Multiplying by $p^i$, we obtain
+\[p^i\varphi(z_i)^{p^{n-1-i}} \equiv p^i z_i^{p^{n-i}}\pmod{p^n A}.\]
+Summing over $i=0,\dots,n-1$, it follows that
+\[\varphi(u_{n-1})\equiv z_0^{p^n}+pz_1^{p^{n-1}}+\cdots+p^{n-1}z_{n-1}^p\pmod{p^nA}.\]
+But by hypothesis,
+\[u_n\equiv \varphi(u_{n-1})\pmod{p^nA}.\]
+Combining the two congruences yields
+\[u_n\equiv z_0^{p^n}+pz_1^{p^{n-1}}+\cdots+p^{n-1}z_{n-1}^p\pmod{p^nA}.\]
+Thus $N_n\in p^nA$, as claimed.
 
-The key property of these quantities is that, when the operations on sequences are defined appropriately, the ghost components behave like ordinary ring coordinates:
-\[ w_n(a+b)=w_n(a)+w_n(b), \qquad w_n(ab)=w_n(a)w_n(b)\]
+Therefore there exists $z_n\in A$ such that
+\[N_n=p^n z_n,\]
+that is,
+\[u_n=z_0^{p^n}+pz_1^{p^{n-1}}+\cdots+p^{n-1}z_{n-1}^p+p^n z_n.\]
+This proves existence.
 
-Thus the complicated carry interactions in the Witt coordinates disappear when expressed in terms of the ghost components. This observation is the starting point of Witt's construction and will allow us to define addition and multiplication on sequences over an arbitrary ring.
+For uniqueness, observe that once $z_0,\dots,z_{n-1}$ are fixed, the above identity determines $z_n$ uniquely, since
+\[p^n z_n=u_n-\bigl(z_0^{p^n}+pz_1^{p^{n-1}}+\cdots+p^{n-1}z_{n-1}^p\bigr).\]
+Thus $z_n$ is forced. By induction, the whole sequence $(z_n)$ is unique.
+\end{proof}
 
+Let
+\[X=(X_0,X_1,X_2,\ldots), \qquad Y=(Y_0,Y_1,Y_2,\ldots)\]
+be sequences of indeterminates. For each $n\geq 0$, define the $n$-th Witt polynomial for the prime $p$ by
+\[w_n(X)=X_0^{p^n}+pX_1^{p^{n-1}}+\cdots+p^nX_n.\]
 
+We now loook for universal polynomials that can describe addition and multiplication in these coordinates.
 
+\begin{theorem}\label{thm:Witt_poly}
+For every $n\geq 0$, there exist unique polynomials
+\[S_n,P_n\in \mathbb{Z}[X_0,\dots,X_n,Y_0,\dots,Y_n]\]
+such that
+\[w_n(S_0,\dots,S_n)=w_n(X_0,\dots,X_n)+w_n(Y_0,\dots,Y_n)\]
+and
+\[w_n(P_0,\dots,P_n)=w_n(X_0,\dots,X_n)\,w_n(Y_0,\dots,Y_n).\]
+\end{theorem}
+
+\begin{proof}
+We first prove uniqueness.
+
+Recall that
+\[w_n(Z_0,\dots,Z_n)=Z_0^{p^n}+pZ_1^{p^{n-1}}+\cdots+p^nZ_n.\]
+Thus the variable $Z_n$ appears only in the last term $p^nZ_n$.
+Hence, once $S_0,\dots,S_{n-1}$ are known, the identity
+\[w_n(S_0,\dots,S_n)=w_n(X)+w_n(Y)\]
+determines $S_n$ uniquely.
+The same argument applies to $P_n$.
+Therefore, if such polynomials exist, they are unique.
+
+We now prove existence.
+
+Let
+\[A=\mathbb{Z}[X_0,X_1,X_2,\dots,Y_0,Y_1,Y_2,\dots]\]
+and define a ring endomorphism $\varphi:A\to A$ by
+\[\varphi(X_i)=X_i^p,\qquad \varphi(Y_i)=Y_i^p\qquad \text{for all } i\ge 0.\]
+Since $\varphi$ is a ring homomorphism and sends each variable to its $p$-th power, one has
+\[\varphi(f)\equiv f^p \pmod{pA}\qquad \text{for every } f\in A.\]
+
+Define two sequences $(u_n)_{n\ge0}$ and $(v_n)_{n\ge0}$ in $A$ by
+\[u_n:=w_n(X)+w_n(Y),\qquad v_n:=w_n(X)w_n(Y).\]
+
+We claim that these sequences satisfy the congruences of Lemma \ref{lemma:frobenius_congruence}.
+
+First, for $(u_n)$:
+\[\varphi(u_n)=\varphi(w_n(X))+\varphi(w_n(Y)).\]
+Now
+\[\varphi(w_n(X))=X_0^{p^{n+1}}+pX_1^{p^n}+\cdots+p^nX_n^p\equiv w_{n+1}(X)\pmod{p^{n+1}A},\]
+since
+\[w_{n+1}(X)=X_0^{p^{n+1}}+pX_1^{p^n}+\cdots+p^nX_n^p+p^{n+1}X_{n+1}.\]
+Similarly,
+\[\varphi(w_n(Y))\equiv w_{n+1}(Y)\pmod{p^{n+1}A}.\]
+Therefore
+\[\varphi(u_n)\equiv u_{n+1}\pmod{p^{n+1}A}.\]
+
+Next, for $(v_n)$:
+\[\varphi(v_n)=\varphi(w_n(X))\,\varphi(w_n(Y)).\]
+Using again
+\[\varphi(w_n(X))\equiv w_{n+1}(X)\pmod{p^{n+1}A},\qquad\varphi(w_n(Y))\equiv w_{n+1}(Y)\pmod{p^{n+1}A},\]
+we obtain
+\[\varphi(v_n)\equiv w_{n+1}(X)w_{n+1}(Y)=v_{n+1}\pmod{p^{n+1}A}.\]
+
+Thus both sequences satisfy the hypotheses of Lemma \ref{lemma:frobenius_congruence}. Applying the lemma to $(u_n)$, there exists a unique sequence
+\[(S_n)_{n\ge0}\subset A\]
+such that
+\[u_n=S_0^{p^n}+pS_1^{p^{n-1}}+\cdots+p^nS_n=w_n(S_0,\dots,S_n).\]
+That is,
+\[w_n(S_0,\dots,S_n)=w_n(X)+w_n(Y).\]
+
+Applying the lemma to $(v_n)$, there exists a unique sequence
+\[(P_n)_{n\ge0}\subset A\]
+such that
+\[v_n=P_0^{p^n}+pP_1^{p^{n-1}}+\cdots+p^nP_n=w_n(P_0,\dots,P_n).\]
+That is,
+\[w_n(P_0,\dots,P_n)=w_n(X)w_n(Y).\]
+
+Finally, since $u_n$ and $v_n$ involve only the variables
+\[X_0,\dots,X_n,Y_0,\dots,Y_n,\]
+the recursive construction shows that $S_n$ and $P_n$ also involve only these variables. Hence
+\[S_n,P_n\in \mathbb{Z}[X_0,\dots,X_n,Y_0,\dots,Y_n].\]
+This completes the proof.
+\end{proof}
 
 
 
@@ -426,5 +627,13 @@ Clearly, it's a red flag if your thesis length deviates a lot from the expected 
 
 \section{Appendix}
 \label{sec:appendix}
-
+Proof of \ref{equiv_A}.
+\begin{proof}
+  We will proceed by recursion on $i\in\mathbb{N}$, with the case $i=0$ being the hypothesis.
+  Suppose now that for $i\in\mathbb{N}$ we have $x^{p^i}\equiv y^{p^i} \pmod {p^{i+1}A}$. We can write, for some $\alpha \in A $ \[x^{p^i}=y^{p^i}+\alpha p^{i+1}\implies x^{p^{i+1}}=\bigl(y^{p^i}+\alpha p^{i+1}\bigr)^p.\]
+  Now expanding with Newton's binomial theorem, \[x^{p^{i+1}}=\bigl(y^{p^(i+1)}+\alpha p^{i+1}\bigr)^p=y^{p^i}+\alpha^p p^{p(i+1)}+\sum_{k=0}^{p-1}\binom{p}{k}y^{p^{i}(p-k)}\alpha^k p^{k(i+1)}.\]
+  For $k\in\{1,\ldots,p-1\}$ we have \[\binom{p}{k}\mid pA \implies \binom{p}{k}y^{p^{i}(p-k)}\alpha^k p^{k(i+1)}\mid p^{i+2}.\]
+  And \[p^{p(i+1)}\mid p^{i+2} \text{ since }p\geq 2.\]
+  We indeed get that $x^{p^{i+1}}\equiv y^{p^{i+1}} \pmod {p^{i+2}A}$.
+\end{proof}
 \end{document}
