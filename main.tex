@@ -46,6 +46,9 @@ Later
 \newtheorem{corollary}{Corollary}
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{float}
 
 %% \predate{}
 %% \postdate{}
@@ -142,7 +145,7 @@ Later
 \subsection{Motivation}
 Witt vector rings are algebraic objects with multiple useful properties such as the possibility of \emph{lifting} rings from characteristic $p$, with $p$ a prime, to characteristic $0$, as well as being an alternative way of constructing \emph{p-adic numbers}. 
 
-Computationally we use truncated Witt vectors, the finite counterpart to Witt vectors, as it has the same properties in the finite case. The problem is that the construction of the Witt vector polynomials are of exponential complexity, both in $p$ and in the length of the trunacated Witt vectors, called \emph{precision}.
+Computationally we use truncated Witt vectors, the finite counterpart to Witt vectors, as it has the same properties in the finite case. The problem is that the construction of the Witt vector polynomials are of exponential complexity, both in $p$ and in the length of the truncated Witt vectors, called \emph{precision}.
 
 So caching etc is important.
 
@@ -316,10 +319,10 @@ Moreover, every element of $\mathbb{Z}_p$ admits a unique expansion of this form
 
 We now investigate whether such a reconstruction can be made into a ring-theoretic one.
 
-Since $\mathbb{Z}_p$ is a ring, we need to endow $\mathbb{F}_p^{\mathbb{N}}$ with a ring structure that support the arithmetic of $p$-adic integers. However this cannot be done using componentwise operations because of the carry arithmetic involved in addition and multiplication of $p$-adic integers. For example:
+Since $\mathbb{Z}_p$ is a ring, we need to endow $\mathbb{F}_p^{\mathbb{N}}$ with a ring structure that supports the arithmetic of $p$-adic integers. However this cannot be done using componentwise operations because of the carry arithmetic involved in addition and multiplication of $p$-adic integers. For example:
 \[(1,0,0,\ldots)+(p-1,0,0,\ldots)=(0,0,0,\ldots)\] under componentwise addition in $\mathbb{F}_p^{\mathbb{N}}$ whereas \[1+(p-1)=p\] in $\mathbb{Z}_p$ corresponds to \[(0,1,0,\ldots)\ne (0,0,0,\ldots).\]
 
-Thus the correct ring structure on $\mathbb{F}_p^{\mathbb{N}}$ cannot be the naive componentwise one. Instead, we will try to transpose the ring structure of $\mathbb{Z}_p$ to $\mathbb{F}_p^{\mathbb{N}}$ using $\phi$. But first, lets prove that $\phi$ is a bijection.
+Thus the correct ring structure on $\mathbb{F}_p^{\mathbb{N}}$ cannot be the naive componentwise one. Instead, we will try to transpose the ring structure of $\mathbb{Z}_p$ to $\mathbb{F}_p^{\mathbb{N}}$ using $\phi$. But first, let us prove that $\phi$ is a bijection.
 
 \begin{proposition}
 The map
@@ -525,7 +528,7 @@ Let
 be sequences of indeterminates. For each $n\geq 0$, define the $n$-th Witt polynomial for the prime $p$ by
 \[w_n(X)=X_0^{p^n}+pX_1^{p^{n-1}}+\cdots+p^nX_n.\]
 
-We now loook for universal polynomials that can describe addition and multiplication in these coordinates.
+We now look for universal polynomials that can describe addition and multiplication in these coordinates.
 
 \begin{theorem}\label{thm:Witt_poly}
 For every $n\geq 0$, there exist unique polynomials
@@ -764,7 +767,7 @@ on each coordinate.
 
 \begin{corollary}\label{cor:ZZ_pipeline}
 Let $A$ be a commutative ring. Then the canonical morphism \[\iota_A:\mathbb{Z}\to A\]
-induces, by Theorem \ref{thm:poly_universal}, a coefficient morphism \[\mathbb{Z}[X_1,\dots,X_m]\to A[X_1,\dots,X_m].\]
+induces, by Theorem \ref{thm:poly_extension}, a coefficient morphism \[\mathbb{Z}[X_1,\dots,X_m]\to A[X_1,\dots,X_m].\]
 
 In particular, any polynomial with coefficients in $\mathbb{Z}$ can be
 transported canonically to a polynomial with coefficients in $A$.
@@ -788,16 +791,227 @@ allows them to be interpreted over $A$, and the induced morphism \[W(\mathbb{Z})
 shows that this transport is compatible with the Witt vector structure.
 \end{proof}
 
-\section{Sagemath}
+\section{SageMath}
 \subsection{Introduction to the software}
-quick history and why is it useful
-\subsection{Current implementation of Witt Vectors}
-Based on ruben's branch
-\subsubsection{UniqueRepresentation}
-\subsection{Optimizations}
-Caching based on the ZZ-->R math. 
-\subsubsection{UniqueFactory}
-digging into the UniqueFactory construction, understanding how it works and why its better than UniqueRepresentation
+SageMath\cite{sagemath}, also called Sage, is an open-source software designed for advanced mathematical computation. It was created over twenty years ago with the goal of providing a free mathematical software environment that integrates many different areas of mathematics, including algebra, geometry, number theory, and topology. By combining numerous specialized mathematical libraries into a single framework, SageMath allows users to access powerful computational tools within a unified interface. Its open-source nature also enables researchers and contributors from around the world to inspect, improve, and extend the software.
+
+
+\subsection{Current implementation of Witt vectors}
+
+The current implementation of Witt vectors in SageMath \cite{sagemath} uses several different algorithms depending on structural properties of the coefficient ring. These choices reflect mathematical simplifications that occur under certain assumptions on the base ring.
+
+The following pseudo-code summarizes the algorithm selection logic used when constructing a Witt vector ring.
+
+\begin{algorithm}[H]
+\caption{Selection of the computation algorithm in a Witt vector ring}
+\label{alg:witt_algorithm_selection}
+\begin{algorithmic}[1]
+\Require Prime $p$, base ring $R$
+\If{$p = \operatorname{char}(R)$}
+    \If{$R$ is a finite field, or $R$ is a polynomial ring over a finite field}
+        \State algorithm $\gets$ \texttt{phantom}
+    \Else
+        \State algorithm $\gets$ \texttt{finotti}
+    \EndIf
+\ElsIf{$p$ is a unit in $R$}
+    \State algorithm $\gets$ \texttt{p\_invertible}
+\Else
+    \State algorithm $\gets$ \texttt{standard}
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+
+Each algorithm exploits different algebraic properties of the coefficient ring.
+
+The \emph{phantom} algorithm computes arithmetic in terms of phantom components, which correspond to ghost coordinates lifted to a more convenient ring. Computations are performed in this auxiliary representation and the Witt vector coordinates are reconstructed only when needed.
+
+The \emph{finotti} algorithm applies when the coefficient ring has characteristic $p$. In this case the Witt vector arithmetic can be simplified significantly, and the implementation precomputes binomial tables that accelerate repeated computations.
+
+The \emph{$p$\_invertible} algorithm is used when the prime $p$ is invertible in the coefficient ring. In this situation the ghost component map becomes invertible, allowing Witt vector coordinates to be recovered directly from ghost components without relying on universal Witt polynomials.
+
+Finally, the \emph{standard} algorithm applies in the general case when none of the above simplifications are available. In this setting the Witt vector ring operations are defined through the universal Witt addition and multiplication polynomials introduced in the previous section. These polynomials grow rapidly in complexity as the precision increases, making efficient reuse of previously computed polynomials crucial for performance.
+
+The present work focuses primarily on this \emph{standard} algorithm, since it is the case where the computation and storage of universal Witt polynomials become the main performance bottleneck.
+
+
+\subsection{UniqueRepresentation}
+
+The current implementation of the class \texttt{WittVectorRing} relies on a Sage-specific mechanism called \emph{UniqueRepresentation}. This mechanism ensures that mathematical parent objects are constructed in a canonical way: if the same object is created multiple times using identical parameters, Sage returns the same instance in memory instead of constructing independent objects.
+
+Internally, \emph{UniqueRepresentation} combines two behaviors provided by the classes \emph{CachedRepresentation} and \emph{WithEqualityById}.
+
+The first mechanism, \emph{CachedRepresentation}, implements a cache of previously constructed objects. When a class inherits from it, Sage records each constructed instance together with the parameters used to create it. If the constructor is called again with the same parameters, the cached instance is returned instead of creating a new object.
+
+For example:
+
+\begin{verbatim}
+sage: A = SomeClass(5)
+sage: B = SomeClass(5)
+sage: A is B
+True
+\end{verbatim}
+
+The second mechanism, \emph{WithEqualityById}, defines equality between objects purely in terms of identity. Two objects are considered equal if and only if they are the same object in memory.
+
+This approach has important advantages for mathematical parent objects. In particular, it ensures consistent coercion behavior between algebraic structures and avoids the creation of redundant copies of identical rings.
+
+In the case of Witt vector rings, the parameters determining the parent object are the coefficient ring, the precision of the truncated Witt vectors, the prime $p$, and the algorithm used to compute the ring operations. When a Witt vector ring is constructed, Sage checks whether an object with these parameters already exists in the cache. If so, the cached object is returned; otherwise, a new instance is created.
+
+
+\subsection{Limitations of the current caching approach}
+
+While \emph{UniqueRepresentation} provides canonical construction of parent objects, it ties the caching mechanism directly to the identity of those objects. This design works well when the cached data belongs uniquely to a single mathematical structure.
+
+However, in the case of Witt vectors, a significant portion of the computational cost arises from auxiliary data that is shared across many different Witt vector rings.
+
+For example:
+
+\begin{itemize}
+\item Universal Witt addition and multiplication polynomials depend only on the prime $p$.
+\item Binomial tables used by the \texttt{finotti} algorithm also depend only on $p$.
+\item These objects may be required by many Witt vector rings with different coefficient rings or different precisions.
+\end{itemize}
+
+Consequently, two Witt vector rings such as $W_n(R)$ and $W_m(S)$ may be mathematically distinct parent objects, yet still require access to the same intermediate computational data.
+
+Under the \emph{UniqueRepresentation} approach, these auxiliary structures are attached to individual parent objects. As a result, they may be recomputed multiple times across different Witt vector rings even though the mathematical data is identical.
+
+This mismatch between \emph{object identity} and \emph{shared computational data} motivates the use of a different construction mechanism.
+
+
+\subsection{UniqueFactory}
+
+To address this limitation, Sage provides an alternative construction mechanism called \emph{UniqueFactory}. Instead of attaching the caching mechanism directly to the class representing the mathematical object, a \emph{UniqueFactory} introduces a separate factory responsible for constructing and caching instances.
+
+A typical \emph{UniqueFactory} defines two key methods:
+
+\begin{itemize}
+\item \texttt{create\_key}, which validates and normalizes the constructor arguments and produces a canonical key identifying the object,
+\item \texttt{create\_object}, which constructs the corresponding instance if it is not already present in the cache.
+\end{itemize}
+
+This design separates three responsibilities that are intertwined in \emph{UniqueRepresentation}:
+
+\begin{itemize}
+\item normalization of constructor arguments,
+\item caching of constructed objects,
+\item creation of the underlying mathematical object.
+\end{itemize}
+
+Because the factory object exists independently of the mathematical parent class, it can also maintain additional caches of shared computational data. These caches may be indexed differently from the object cache itself.
+
+In the context of Witt vectors, this allows universal Witt polynomials and binomial tables to be stored in caches indexed only by the prime $p$. As a result, these expensive intermediate structures are computed once and reused across many Witt vector rings, even when their coefficient rings or precisions differ.
+
+
+\subsection{Implementation of the optimizations}
+Based on the observations above, the Witt vector implementation was redesigned using a \emph{UniqueFactory}. The implementation of these optimizations is done\cite{grossard_amin_sage_witt_2026}, and a pull request to the official SageMath repository \cite{sagemath} is on the way. In the new design, the public constructor \texttt{WittVectorRing} is no longer a class inheriting from \emph{UniqueRepresentation}, but a factory responsible for constructing and caching the appropriate parent objects.
+
+The following pseudo-code summarizes the construction process.
+
+\begin{algorithm}[H]
+\caption{Construction of a truncated Witt vector ring through the factory}
+\begin{algorithmic}[1]
+\Require coefficient ring $R$, precision $n$, optional prime $p$, optional algorithm $a$
+\Ensure A unique Witt vector ring object $W_n(R)$
+
+\State Validate that $R$ is a commutative ring
+\State Validate that $n$ is a positive integer
+\State Compute $\mathrm{char}(R)$
+
+\If{$p$ is not given}
+    \If{$\mathrm{char}(R)$ is prime}
+        \State $p \gets \mathrm{char}(R)$
+    \Else
+        \State raise error
+    \EndIf
+\ElsIf{$p$ is not prime}
+    \State raise error
+\EndIf
+
+\State Determine algorithm $a$ using Algorithm~\ref{alg:witt_algorithm_selection}
+
+\State Define normalized key $K = (R,n,p,a)$
+
+\If{$K$ exists in factory cache}
+    \State return cached object
+\Else
+    \State construct algorithm-specific Witt vector ring
+    \State store object in factory cache
+    \State return object
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Shared computational caches}
+
+In addition to the object-level cache, the factory maintains shared caches of auxiliary computational data indexed only by the prime $p$.
+
+For example:
+
+\begin{itemize}
+\item binomial tables used by the \texttt{finotti} algorithm,
+\item universal Witt polynomials used by the \texttt{standard} algorithm.
+\end{itemize}
+
+Before constructing a new Witt vector ring object, the factory therefore ensures that the corresponding shared data is available.
+
+\begin{algorithm}[H]
+\caption{Factory dispatch and precomputation}
+\begin{algorithmic}[1]
+\Require normalized key $K=(R,n,p,a)$
+
+\If{$a=\texttt{finotti}$}
+    \If{binomial table for $p$ does not exist}
+        \State compute binomial table
+    \ElsIf{table too short}
+        \State extend table
+    \EndIf
+    \State create \texttt{WittVectorRing\_finotti}
+
+\ElsIf{$a=\texttt{phantom}$}
+    \State create \texttt{WittVectorRing\_phantom}
+
+\ElsIf{$a=\texttt{p\_invertible}$}
+    \State create \texttt{WittVectorRing\_pinvertible}
+
+\Else
+    \If{universal Witt polynomials for $p$ do not exist}
+        \State compute them
+    \ElsIf{existing list too short}
+        \State extend list
+    \EndIf
+    \State create \texttt{WittVectorRing\_standard}
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Use of universal Witt polynomials}
+
+For the \texttt{standard} algorithm, the key observation is that the Witt addition, multiplication, and Frobenius polynomials are universal polynomials defined over $\mathbb{Z}$. As shown in the previous section, these polynomials depend only on the prime $p$ and not on the coefficient ring.
+
+Consequently, the factory computes these polynomials once over $\mathbb{Z}$ and stores them in its cache indexed by $p$. When a specific Witt vector ring over a coefficient ring $R$ is created, the factory converts these universal polynomials to the corresponding polynomial ring over $R$.
+
+\begin{algorithm}[H]
+\caption{Use of cached universal polynomials}
+\begin{algorithmic}[1]
+\Require coefficient ring $R$, precision $n$, prime $p$
+
+\State retrieve universal Witt polynomials for $p$
+
+\For{$i=0,\dots,n-1$}
+    \State convert $i$-th universal sum polynomial to ring over $R$
+    \State convert $i$-th universal product polynomial to ring over $R$
+\EndFor
+
+\For{$i=0,\dots,n-2$}
+    \State convert $i$-th Frobenius polynomial to ring over $R$
+\EndFor
+
+\State attach converted polynomials to the Witt vector ring object
+\end{algorithmic}
+\end{algorithm}
 
 \section{Benchmarks}
 Yay it helps a lot
@@ -806,33 +1020,10 @@ Yay it helps a lot
 \subsection{Git}
 Git branching and rebasing/merging, PR
 \subsection{Software engineering practices}
-Python PEP8, Docstring/Doctests and coverage, readility > micro optimizations.
+Python PEP8, Docstring/Doctests and coverage, readability > micro optimizations.
 
 \newpage
-\newpage
-\section{(to be deleted) Guidelines for your thesis report}
 
-
-\begin{itemize}
-\item Structure your thesis using sections, subsections, paragraphs as you like. We advise you to not use chapters (the thesis is a ``short'' document, it should not be more than 30 pages). However, you are free to use them if you think that will improve your work (so, at your own risk).
-%
-\item Use bibtex to cite related work, e.g., \cite{DBLP:journals/x/Turing37}, adding your reference in the {main.bib} file and use the {$\backslash$cite} command. 
-%
-\item Change the value of the commands {$\backslash$thesistitle}, {$\backslash$authorname}, {$\backslash$supervisor}, {$\backslash$supervisorinstitution}, {$\backslash$abstracttext} to set up the content of the title page. These commands are beginning of the {main.tex} file.
-%
-\item The thesis should be \textbf{at most} 30 pages long. The official guideline is to have a thesis ``between 20 and 30 pages long''. However, these page limits are a \emph{guideline} and will not be enforced strictly. 
-%
-The main advise is to shoot for quality and not or length: we prefer reading fewer pages containing high quality, well explained, work rather than 30 pages of messy content. Your grade is not a function of the number of pages!
-%
-Clearly, it's a red flag if your thesis length deviates a lot from the expected value of 20 pages (e.g., your thesis has 5 pages or it has 60 pages).
-%
-\item The appendix is \textbf{not included} in the page count, while the title page, abstract page, table of content page, and all the bibliography instead are included. Again, the page limit is not enforced strictly, so this information should not be extremely important.
-%
-\item Note: we will not evaluate your appendix that should not contain your thesis contribution but only provide additional details (e.g., some important code, additional tables or details for the experiments, \ldots).
-%
-\item You \textbf{cannot} change the tex template (e.g., font size, margin size, \ldots). We fix a template so all the students work under the same condition. Get in touch if you see some bug in the template or some possible improvement (we may, or not, improve the template with your suggestion).
-% 
-\end{itemize}
 
 \newpage
 \bibliographystyle{plain}
