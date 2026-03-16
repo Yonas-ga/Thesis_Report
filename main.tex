@@ -43,6 +43,7 @@ Later
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
 \newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
 
@@ -618,9 +619,174 @@ This completes the proof.
 
 
 \subsection{Related Theorems}
-ZZ-->R unique homomorphism always exists
 
-$\phi (R) = ZZ \implies W(ZZ) = W(\phi (R))$
+
+For reasons that will be developed in the next section, we recall several
+results explaining why the Witt polynomials can be computed once over
+$\mathbb{Z}$ and then reused over any coefficient ring. First we establish
+the existence of the canonical morphism $\mathbb{Z}\to A$, then recall the
+universal property of polynomial rings, and finally prove the functoriality
+of the Witt vector construction.
+
+\begin{proposition}\label{prop:Z_to_A}
+Let $A$ be a unital ring. Then there exists a unique unital ring homomorphism
+\[\iota_A:\mathbb{Z}\to A.\]
+It is given by \[\iota_A(n)=n\cdot 1_A. \]
+\end{proposition}
+
+\begin{proof}
+Define \[\iota_A(n)=n\cdot 1_A\]
+for all $n\in\mathbb{Z}$.
+
+We first check that $\iota_A$ is a ring homomorphism. For $m,n\in\mathbb{Z}$,
+\[\iota_A(m+n)=(m+n)1_A=m1_A+n1_A=\iota_A(m)+\iota_A(n).\]
+
+Similarly, \[\iota_A(mn)=(mn)1_A=(m1_A)(n1_A)=\iota_A(m)\iota_A(n).\]
+
+Finally, \[\iota_A(1)=1_A,\]
+so $\iota_A$ is unital.
+
+To prove uniqueness, let $f:\mathbb{Z}\to A$ be any unital ring homomorphism.
+Since $f(1)=1_A$, for every integer $n\ge0$ we obtain
+\[f(n)=f(\underbrace{1+\cdots+1}_{n\text{ times}})=\underbrace{f(1)+\cdots+f(1)}_{n\text{ times}} =n1_A=\iota_A(n).\]
+
+For negative integers, \[f(-n)=-f(n)=-n1_A=\iota_A(-n).\]
+
+Thus $f=\iota_A$, proving uniqueness.
+\end{proof}
+
+\begin{theorem}[Extension of coefficient morphisms]
+\label{thm:poly_extension}
+Let $A$ and $B$ be commutative rings and let \[\varphi:A\to B\]
+be a ring homomorphism.
+
+Then there exists a unique ring homomorphism \[\Phi:A[X_0,\dots,X_m]\to B[X_0,\dots,X_m] \]
+such that \[\Phi(a)=\varphi(a)\qquad\text{for all }a\in A \]
+and \[\Phi(X_i)=X_i\qquad\text{for }i=0,\dots,m.\]
+
+In other words, $\Phi$ applies $\varphi$ to the coefficients of a polynomial
+while leaving the variables unchanged.
+\end{theorem}
+
+\begin{proof}
+
+Every polynomial in $A[X_0,\dots,X_m]$ can be written uniquely in the form
+\[f=\sum_{\alpha} a_\alpha X^\alpha,\]
+
+where the sum runs over finitely many multi-indices \[\alpha=(\alpha_0,\dots,\alpha_m)\in\mathbb{N}^{m+1}.\]
+
+The notation$ X^\alpha$ denotes the monomial \[X^\alpha=X_0^{\alpha_0}X_1^{\alpha_1}\cdots X_m^{\alpha_m}.\]
+
+For example, if \[\alpha=(2,0,3), \]
+then \[X^\alpha = X_0^2 X_2^3.\]
+
+Define a map \[\Phi:A[X_0,\dots,X_m]\to B[X_0,\dots,X_m]\]
+by \[\Phi\!\left(\sum_{\alpha} a_\alpha X^\alpha\right)=\sum_{\alpha} \varphi(a_\alpha) X^\alpha. \]
+
+Since each polynomial contains only finitely many monomials, the right-hand
+side is a well-defined element of $B[X_0,\dots,X_m]$.
+
+We now verify that $\Phi$ is a ring homomorphism.
+
+\textbf{Additivity.}
+
+Let \[f=\sum a_\alpha X^\alpha,\qquad g=\sum b_\alpha X^\alpha.\]
+
+Then \[f+g=\sum (a_\alpha+b_\alpha)X^\alpha.\]
+
+Applying $\Phi$ gives \[\Phi(f+g)=\sum \varphi(a_\alpha+b_\alpha)X^\alpha=\sum (\varphi(a_\alpha)+\varphi(b_\alpha))X^\alpha=\Phi(f)+\Phi(g),\]
+
+since $\varphi$ is a ring homomorphism.
+
+\textbf{Multiplicativity.}
+
+Using the usual multiplication of polynomials, \[fg=\sum_{\alpha,\beta} a_\alpha b_\beta X^{\alpha+\beta},\]
+
+where \[\alpha+\beta=(\alpha_0+\beta_0,\dots,\alpha_m+\beta_m).\]
+
+Applying $\Phi$ gives
+
+\[\Phi(fg)=\sum_{\alpha,\beta}\varphi(a_\alpha b_\beta) X^{\alpha+\beta}.\]
+
+Since $\varphi$ is multiplicative, \[\varphi(a_\alpha b_\beta)=\varphi(a_\alpha)\varphi(b_\beta),\]
+
+so \[\Phi(fg)=\sum_{\alpha,\beta}\varphi(a_\alpha)\varphi(b_\beta) X^{\alpha+\beta}. \]
+
+But this is exactly the product \[\Phi(f)\Phi(g).\]
+Thus $\Phi$ preserves multiplication.
+
+Finally, by construction \[\Phi(a)=\varphi(a)\qquad (a\in A), \]
+
+and \[\Phi(X_i)=X_i.\]
+
+To prove uniqueness, observe that every polynomial is a finite sum of
+monomials $a_\alpha X^\alpha$. Any ring homomorphism satisfying the above
+conditions must therefore send such a monomial to \[\varphi(a_\alpha)X^\alpha. \]
+
+Hence it must coincide with $\Phi$ on all polynomials, and therefore $\Phi$
+is unique.
+
+\end{proof}
+
+\begin{theorem}[Functoriality of Witt vectors]
+\label{thm:Witt_functoriality}
+Let $A$ and $B$ be commutative rings and let \[\varphi:A\to B \]
+be a ring homomorphism. Then there exists a unique ring homomorphism \[W(\varphi):W(A)\to W(B) \]
+defined by \[W(\varphi)(a_0,a_1,a_2,\dots) =(\varphi(a_0),\varphi(a_1),\varphi(a_2),\dots). \]
+\end{theorem}
+
+\begin{proof}
+Let \[a=(a_0,a_1,a_2,\dots),\qquad b=(b_0,b_1,b_2,\dots) \]
+be Witt vectors in $W(A)$.
+
+By construction of the Witt vector ring, the addition and multiplication
+coordinates are given by universal polynomials \[S_n,P_n\in\mathbb{Z}[X_0,\dots,X_n,Y_0,\dots,Y_n] \]
+such that \[(a+b)_n=S_n(a_0,\dots,a_n,b_0,\dots,b_n), \]
+and \[(ab)_n=P_n(a_0,\dots,a_n,b_0,\dots,b_n).\]
+
+Applying $\varphi$ to the $n$th coordinate of the sum gives \[\varphi((a+b)_n)=\varphi(S_n(a_0,\dots,a_n,b_0,\dots,b_n)).\]
+
+Since $S_n$ has coefficients in $\mathbb{Z}$ and $\varphi$ is a ring
+homomorphism, evaluation commutes with $\varphi$, so \[\varphi(S_n(a_0,\dots,a_n,b_0,\dots,b_n))=S_n(\varphi(a_0),\dots,\varphi(a_n),\varphi(b_0),\dots,\varphi(b_n)).\]
+
+Thus \[W(\varphi)(a+b)_n=(W(\varphi)(a)+W(\varphi)(b))_n.\]
+
+The same argument applies to multiplication:
+\[\varphi((ab)_n)=\varphi(P_n(a_0,\dots,a_n,b_0,\dots,b_n))=P_n(\varphi(a_0),\dots,\varphi(a_n),\varphi(b_0),\dots,\varphi(b_n)). \]
+
+Hence \[W(\varphi)(ab)=W(\varphi)(a)\,W(\varphi)(b).\]
+
+Therefore $W(\varphi)$ is a ring homomorphism.
+
+Uniqueness follows immediately, since the formula for $W(\varphi)$ is forced
+on each coordinate.
+\end{proof}
+
+\begin{corollary}\label{cor:ZZ_pipeline}
+Let $A$ be a commutative ring. Then the canonical morphism \[\iota_A:\mathbb{Z}\to A\]
+induces, by Theorem \ref{thm:poly_universal}, a coefficient morphism \[\mathbb{Z}[X_1,\dots,X_m]\to A[X_1,\dots,X_m].\]
+
+In particular, any polynomial with coefficients in $\mathbb{Z}$ can be
+transported canonically to a polynomial with coefficients in $A$.
+
+Moreover, by Theorem \ref{thm:Witt_functoriality}, the morphism $\iota_A$
+induces a ring homomorphism \[W(\mathbb{Z})\to W(A). \]
+
+Therefore the universal Witt addition, multiplication, and Frobenius
+polynomials, once computed over $\mathbb{Z}$, may be evaluated over any
+coefficient ring $A$.
+\end{corollary}
+
+\begin{proof}
+The first statement follows directly from the universal property of
+polynomial rings applied to the canonical morphism \[\iota_A:\mathbb{Z}\to A.\]
+
+The second statement follows from the functoriality of Witt vectors. Since
+the Witt sum, product, and Frobenius polynomials have coefficients in
+$\mathbb{Z}$, the coefficient morphism \[ \mathbb{Z}[X_1,\dots,X_m]\to A[X_1,\dots,X_m] \]
+allows them to be interpreted over $A$, and the induced morphism \[W(\mathbb{Z})\to W(A)\]
+shows that this transport is compatible with the Witt vector structure.
+\end{proof}
 
 \section{Sagemath}
 \subsection{Introduction to the software}
